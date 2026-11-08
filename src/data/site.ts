@@ -6,8 +6,10 @@ export const site = {
     "Samin Sadaf is an AI researcher and builder working on deep learning for agricultural disease detection, and a software engineering graduate from Daffodil International University.",
   url: "https://saminsadaf22.github.io",
   location: "Dhaka, Bangladesh",
-  // TODO: replace with the address you actually want public.
-  email: "hello@saminsadaf.me",
+  email: "md.saminsadaf@gmail.com",
+  // Shown as written locally; the tel: link needs the country code.
+  phone: "01847309297",
+  phoneHref: "+8801847309297",
   socials: [
     { label: "GitHub", href: "https://github.com/SaminSadaf22" },
     // TODO: confirm this is your Hugging Face namespace.

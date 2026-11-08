@@ -15,7 +15,6 @@ const education = {
   institution: "Daffodil International University",
   location: "Dhaka, Bangladesh",
   graduated: "June 2026",
-  cgpa: "3.00 / 4.00",
   thesis: "Corn Leaf Disease Detection Using Deep Learning",
 };
 
@@ -59,6 +58,10 @@ const summary =
         <a href={`mailto:${site.email}`} class="underline decoration-line underline-offset-4 hover:text-mint">
           {site.email}
         </a>
+        <span aria-hidden="true" class="text-faint">·</span>
+        <a href={`tel:${site.phoneHref}`} class="underline decoration-line underline-offset-4 hover:text-mint">
+          {site.phone}
+        </a>
         {site.socials.map((social) => (
           <Fragment>
             <span aria-hidden="true" class="text-faint">·</span>
@@ -91,7 +94,7 @@ const summary =
         </div>
         <p class="mt-1 text-sm text-muted">{education.institution} · {education.location}</p>
         <p class="mt-2 text-sm text-muted">
-          CGPA {education.cgpa}. Thesis: <em>{education.thesis}</em>.
+          Thesis: <em>{education.thesis}</em>.
         </p>
       </div>
     </section>

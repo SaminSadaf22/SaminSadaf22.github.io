@@ -5,7 +5,7 @@ import { site } from "../data/site";
 
 <MainLayout
   title="Contact"
-  description="Contact Samin Sadaf by email."
+  description="Contact Samin Sadaf by email or phone."
 >
   <section class="border-b border-line py-14">
     <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Contact</p>
@@ -24,8 +24,17 @@ import { site } from "../data/site";
       >
         {site.email}
       </a>
-      <p class="mt-4 text-sm leading-relaxed text-muted">
-        Opens your mail client — no form, no third party holding your message.
+
+      <p class="mt-8 font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Phone</p>
+      <a
+        href={`tel:${site.phoneHref}`}
+        class="mt-3 inline-block font-display text-xl font-medium tracking-tight text-ink underline decoration-line underline-offset-4 hover:text-mint"
+      >
+        {site.phone}
+      </a>
+
+      <p class="mt-6 text-sm leading-relaxed text-muted">
+        Email opens your mail client — no form, no third party holding your message.
       </p>
     </div>
 
