@@ -1,0 +1,85 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const inputs = [
+  { x: 48, y: 56 },
+  { x: 48, y: 128 },
+  { x: 48, y: 200 },
+  { x: 48, y: 272 },
+];
+const hidden = [
+  { x: 248, y: 92 },
+  { x: 248, y: 164 },
+  { x: 248, y: 236 },
+];
+const output = { x: 432, y: 164 };
+
+const edges = [
+  ...inputs.flatMap((from, i) => hidden.map((to, j) => ({ from, to, key: `i${i}-h${j}`, active: (i + j) % 4 === 0 }))),
+  ...hidden.map((from, j) => ({ from, to: output, key: `h${j}-o`, active: j === 1 })),
+];
+---
+
+<div class:list={["relative", className]} aria-hidden="true">
+  <svg viewBox="0 0 480 328" fill="none" class="h-auto w-full">
+    <g stroke="#253247" stroke-width="1">
+      {edges.filter((e) => !e.active).map((e) => (
+        <line x1={e.from.x} y1={e.from.y} x2={e.to.x} y2={e.to.y} />
+      ))}
+    </g>
+
+    <g stroke="#77E5D4" stroke-width="1" stroke-opacity="0.55">
+      {edges.filter((e) => e.active).map((e) => (
+        <line
+          class="edge-flow"
+          x1={e.from.x}
+          y1={e.from.y}
+          x2={e.to.x}
+          y2={e.to.y}
+          stroke-dasharray="4 10"
+        />
+      ))}
+    </g>
+
+    {inputs.map((node) => (
+      <rect x={node.x - 3} y={node.y - 3} width="6" height="6" fill="#0E1420" stroke="#3A4A63" />
+    ))}
+
+    {hidden.map((node) => (
+      <rect x={node.x - 3} y={node.y - 3} width="6" height="6" fill="#0E1420" stroke="#718096" />
+    ))}
+
+    <rect x={output.x - 5} y={output.y - 5} width="10" height="10" fill="#77E5D4" />
+
+    <g stroke="#253247" stroke-width="1">
+      <line x1="24" y1="320" x2="456" y2="320" />
+      <line x1="24" y1="320" x2="24" y2="312" />
+      <line x1="456" y1="320" x2="456" y2="312" />
+    </g>
+  </svg>
+</div>
+
+<style>
+  .edge-flow {
+    animation: flow 3.2s linear infinite;
+  }
+
+  @keyframes flow {
+    to {
+      stroke-dashoffset: -28;
+    }
+  }
+
+  /* Motion is decorative here; honour the user's preference and stop it. */
+  @media (prefers-reduced-motion: reduce) {
+    .edge-flow {
+      animation: none;
+      stroke-dasharray: none;
+      stroke-opacity: 0.35;
+    }
+  }
+</style>

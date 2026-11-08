@@ -1,0 +1,60 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { researchInterests } from "../data/profile";
+---
+
+<MainLayout
+  title="Research"
+  description="Research by Samin Sadaf on applied deep learning and computer vision for agriculture."
+>
+  <section class="border-b border-line py-14">
+    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Research</p>
+    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">
+      Applied deep learning, honestly evaluated.
+    </h1>
+    <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted">
+      My work so far is a single thesis project, documented in full rather than
+      summarised into a headline.
+    </p>
+  </section>
+
+  <section class="border-b border-line py-14">
+    <h2 class="font-display text-xl font-medium tracking-tight">Current work</h2>
+    <a href="/projects/corn-leaf-disease" class="group mt-6 block border border-line bg-card p-6 sm:p-8 hover:border-mint/50">
+      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">Thesis · 2026</p>
+      <h3 class="mt-3 font-display text-2xl font-medium tracking-tight text-ink">
+        Corn Leaf Disease Detection Using Deep Learning
+      </h3>
+      <p class="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
+        A controlled comparison of DenseNet121 and EfficientNet-B0 for corn leaf
+        disease classification with transfer learning from ImageNet weights.
+      </p>
+      <span class="mt-6 inline-block font-mono text-[10px] uppercase tracking-[0.18em] text-muted group-hover:text-mint">
+        Read the full study →
+      </span>
+    </a>
+  </section>
+
+  <section class="border-b border-line py-14">
+    <h2 class="font-display text-xl font-medium tracking-tight">Areas of interest</h2>
+    <ul class="mt-8 divide-y divide-line border-y border-line">
+      {researchInterests.map((interest) => (
+        <li class="grid gap-2 py-6 sm:grid-cols-[240px_1fr] sm:gap-8">
+          <h3 class="font-display text-base font-medium tracking-tight text-ink">{interest.title}</h3>
+          <p class="text-sm leading-relaxed text-muted">{interest.detail}</p>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="py-14">
+    <h2 class="font-display text-xl font-medium tracking-tight">Publications</h2>
+    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
+      I have no peer-reviewed publications yet. Nothing is listed rather than
+      listed aspirationally.
+    </p>
+    <a href="/publications" class="mt-6 inline-flex border border-line px-4 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted hover:border-mint hover:text-mint">
+      Publications
+    </a>
+  </section>
+</MainLayout>

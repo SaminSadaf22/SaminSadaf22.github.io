@@ -1,0 +1,41 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { publications } from "../data/publications";
+---
+
+<MainLayout
+  title="Publications"
+  description="Research publications by Samin Sadaf."
+>
+  <section class="border-b border-line py-14">
+    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Writing</p>
+    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">Publications</h1>
+    <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted">
+      Peer-reviewed papers, preprints and manuscripts.
+    </p>
+  </section>
+
+  <section class="py-14">
+    {publications.length === 0 ? (
+      <div class="border border-dashed border-line px-6 py-16 text-center">
+        <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">No entries yet</p>
+        <p class="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted">
+          Research publications and manuscripts will be listed here as they
+          become available.
+        </p>
+      </div>
+    ) : (
+      <ul class="divide-y divide-line border-y border-line">
+        {publications.map((publication) => (
+          <li class="flex flex-col gap-1 py-6">
+            <h2 class="font-display text-lg font-medium tracking-tight text-ink">{publication.title}</h2>
+            <p class="text-sm text-muted">{publication.authors.join(", ")}</p>
+            <p class="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
+              {publication.venue} · {publication.year}
+            </p>
+          </li>
+        ))}
+      </ul>
+    )}
+  </section>
+</MainLayout>

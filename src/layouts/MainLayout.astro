@@ -1,0 +1,125 @@
+---
+import "../styles/global.css";
+import { ArrowUp } from "@lucide/astro";
+import Navbar from "../components/Navbar.astro";
+import { nav, site } from "../data/site";
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const pageTitle = title ? `${title} — ${site.name}` : site.title;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = new URL("/og.png", site.url).href;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#090D16" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={`${site.name} — ${site.role}`} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content={ogImage} />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap"
+    />
+  </head>
+
+  <body class="min-h-dvh bg-canvas font-sans text-ink antialiased">
+    <a
+      href="#content"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-mint focus:bg-canvas focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-mint"
+    >
+      Skip to content
+    </a>
+
+    <Navbar />
+
+    <main id="content" class="mx-auto w-full max-w-6xl px-5 sm:px-8">
+      <slot />
+    </main>
+
+    <footer class="mt-24 border-t border-line">
+      <div class="mx-auto grid w-full max-w-6xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1fr_auto]">
+        <div class="space-y-2">
+          <p class="font-display text-sm font-medium text-ink">{site.name}</p>
+          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-faint">
+            {site.role} · {site.location}
+          </p>
+          <a href={`mailto:${site.email}`} class="inline-block font-mono text-xs text-muted hover:text-mint">
+            {site.email}
+          </a>
+        </div>
+
+        <nav aria-label="Footer">
+          <ul class="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3">
+            {nav.map((item) => (
+              <li>
+                <a href={item.href} class="font-mono text-[11px] uppercase tracking-[0.14em] text-muted hover:text-mint">
+                  {item.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </div>
+      <div class="mx-auto w-full max-w-6xl border-t border-line/70 px-5 py-5 sm:px-8">
+        <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
+          © {new Date().getFullYear()} {site.name} · Built with Astro
+        </p>
+      </div>
+    </footer>
+
+    <button
+      type="button"
+      id="to-top"
+      aria-label="Back to top"
+      class="fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center border border-line bg-card text-muted opacity-0 transition-opacity hover:border-mint hover:text-mint pointer-events-none"
+    >
+      <ArrowUp size={16} strokeWidth={1.75} aria-hidden="true" />
+    </button>
+
+    <script>
+      const button = document.getElementById("to-top");
+      if (button) {
+        const update = () => {
+          const shown = window.scrollY > 640;
+          button.classList.toggle("opacity-0", !shown);
+          button.classList.toggle("pointer-events-none", !shown);
+          button.tabIndex = shown ? 0 : -1;
+        };
+        const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+        window.addEventListener("scroll", update, { passive: true });
+        button.addEventListener("click", () =>
+          window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }),
+        );
+        update();
+      }
+    </script>
+  </body>
+</html>

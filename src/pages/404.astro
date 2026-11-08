@@ -1,0 +1,43 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { nav } from "../data/site";
+---
+
+<MainLayout
+  title="Page not found"
+  description="That page does not exist on this site."
+>
+  <section class="grid gap-10 border-b border-line py-20 md:grid-cols-[auto_1fr] md:items-center md:gap-16 md:py-28">
+    <p class="font-mono text-6xl font-medium tracking-[0.08em] text-mint sm:text-7xl">404</p>
+    <div>
+      <h1 class="font-display text-3xl font-medium leading-tight tracking-tight text-ink sm:text-4xl">
+        This page isn't here.
+      </h1>
+      <p class="mt-4 max-w-lg text-base leading-relaxed text-muted">
+        The link may be out of date, or the address may have a typo. Everything
+        on the site is reachable from one of the pages below.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-14">
+    <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">Try one of these</p>
+    <ul class="mt-6 grid gap-px border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+      {nav.map((item) => (
+        <li class="bg-canvas">
+          <a
+            href={item.href}
+            class="group flex items-center justify-between gap-4 p-5 transition-colors hover:bg-card"
+          >
+            <span class="font-display text-base font-medium tracking-tight text-ink group-hover:text-mint">
+              {item.label}
+            </span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint group-hover:text-mint" aria-hidden="true">
+              →
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+</MainLayout>

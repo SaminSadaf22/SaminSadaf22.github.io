@@ -1,0 +1,211 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { site } from "../data/site";
+import { skillGroups, researchInterests } from "../data/profile";
+import { projects } from "../data/projects";
+import { publications } from "../data/publications";
+
+const generated = new Date().toLocaleDateString("en-GB", {
+  month: "long",
+  year: "numeric",
+});
+
+const education = {
+  degree: "BSc in Software Engineering",
+  institution: "Daffodil International University",
+  location: "Dhaka, Bangladesh",
+  graduated: "June 2026",
+  cgpa: "3.00 / 4.00",
+  thesis: "Corn Leaf Disease Detection Using Deep Learning",
+};
+
+const summary =
+  "AI researcher and builder working on applied deep learning, most recently computer vision for agricultural disease detection. Software engineering graduate with a focus on evaluation that can be reproduced: documented data, honest splits, and results reported as they are.";
+---
+
+<MainLayout
+  title="Curriculum Vitae"
+  description="Curriculum vitae of Samin Sadaf — education, research project and technical skills."
+>
+  <div class="print-hide flex flex-wrap items-center justify-between gap-4 border-b border-line py-10">
+    <div>
+      <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Document</p>
+      <h1 class="mt-3 font-display text-3xl font-medium tracking-tight sm:text-4xl">Curriculum Vitae</h1>
+    </div>
+    <div class="flex items-center gap-3">
+      <button
+        type="button"
+        id="print-cv"
+        class="inline-flex items-center gap-2 border border-mint px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-mint transition-colors hover:bg-mint hover:text-canvas"
+      >
+        Print / Save as PDF
+      </button>
+      <a
+        href="/profile"
+        class="inline-flex items-center border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:border-muted hover:text-ink"
+      >
+        Technical profile
+      </a>
+    </div>
+  </div>
+
+  <article id="cv-sheet" class="mx-auto my-10 max-w-3xl border border-line bg-surface p-8 sm:p-10">
+    <header class="border-b border-line pb-6">
+      <h2 class="font-display text-3xl font-medium tracking-tight text-ink">{site.name}</h2>
+      <p class="mt-1 font-mono text-[11px] uppercase tracking-[0.18em] text-mint">{site.role}</p>
+      <p class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
+        <span>{site.location}</span>
+        <span aria-hidden="true" class="text-faint">·</span>
+        <a href={`mailto:${site.email}`} class="underline decoration-line underline-offset-4 hover:text-mint">
+          {site.email}
+        </a>
+        {site.socials.map((social) => (
+          <Fragment>
+            <span aria-hidden="true" class="text-faint">·</span>
+            <a
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="underline decoration-line underline-offset-4 hover:text-mint"
+            >
+              {social.label}
+            </a>
+          </Fragment>
+        ))}
+      </p>
+    </header>
+
+    <section class="cv-section border-b border-line py-6">
+      <h3 class="cv-heading font-mono text-[10px] uppercase tracking-[0.2em] text-faint">Summary</h3>
+      <p class="mt-3 text-sm leading-relaxed text-muted">{summary}</p>
+    </section>
+
+    <section class="cv-section border-b border-line py-6">
+      <h3 class="cv-heading font-mono text-[10px] uppercase tracking-[0.2em] text-faint">Education</h3>
+      <div class="mt-3">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+          <p class="font-display text-base font-medium tracking-tight text-ink">{education.degree}</p>
+          <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            Graduated {education.graduated}
+          </p>
+        </div>
+        <p class="mt-1 text-sm text-muted">{education.institution} · {education.location}</p>
+        <p class="mt-2 text-sm text-muted">
+          CGPA {education.cgpa}. Thesis: <em>{education.thesis}</em>.
+        </p>
+      </div>
+    </section>
+
+    <section class="cv-section border-b border-line py-6">
+      <h3 class="cv-heading font-mono text-[10px] uppercase tracking-[0.2em] text-faint">Research</h3>
+      {projects
+        .filter((project) => project.category === "AI Research")
+        .map((project) => (
+          <div class="mt-3">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4">
+              <p class="font-display text-base font-medium tracking-tight text-ink">{project.title}</p>
+              <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">{project.period}</p>
+            </div>
+            <p class="mt-1 text-sm leading-relaxed text-muted">{project.summary}</p>
+            <p class="mt-2 font-mono text-[10px] tracking-[0.1em] text-faint">
+              {project.tags.join(" · ")}
+            </p>
+          </div>
+        ))}
+
+      <ul class="mt-5 space-y-2">
+        {researchInterests.map((interest) => (
+          <li class="text-sm leading-relaxed text-muted">
+            <span class="text-ink">{interest.title}</span> — {interest.detail}
+          </li>
+        ))}
+      </ul>
+    </section>
+
+    <section class="cv-section border-b border-line py-6">
+      <h3 class="cv-heading font-mono text-[10px] uppercase tracking-[0.2em] text-faint">Technical skills</h3>
+      <dl class="mt-3 space-y-2">
+        {skillGroups.map((group) => (
+          <div class="grid gap-1 sm:grid-cols-[160px_1fr] sm:gap-4">
+            <dt class="font-mono text-[10px] uppercase tracking-[0.16em] text-mint">{group.title}</dt>
+            <dd class="text-sm text-muted">{group.items.join(", ")}</dd>
+          </div>
+        ))}
+      </dl>
+    </section>
+
+    <section class="cv-section py-6">
+      <h3 class="cv-heading font-mono text-[10px] uppercase tracking-[0.2em] text-faint">Publications</h3>
+      <p class="mt-3 text-sm text-muted">
+        {publications.length === 0
+          ? "None yet — no peer-reviewed papers have been published."
+          : publications.map((publication) => publication.title).join("; ")}
+      </p>
+    </section>
+
+    <p class="border-t border-line pt-4 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+      {site.url.replace("https://", "")} · Updated {generated}
+    </p>
+  </article>
+</MainLayout>
+
+<style is:global>
+  @media print {
+    header,
+    footer,
+    #to-top,
+    .print-hide,
+    [data-nav-toggle] {
+      display: none !important;
+    }
+
+    html,
+    body {
+      background: #fff !important;
+      background-image: none !important;
+      color: #111 !important;
+    }
+
+    main {
+      max-width: 100% !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    #cv-sheet {
+      border: 0 !important;
+      background: #fff !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      max-width: 100% !important;
+    }
+
+    #cv-sheet,
+    #cv-sheet * {
+      color: #111 !important;
+      border-color: #d4d4d4 !important;
+      background: transparent !important;
+    }
+
+    #cv-sheet a {
+      text-decoration: none !important;
+    }
+
+    .cv-section {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .cv-heading {
+      color: #555 !important;
+    }
+
+    @page {
+      margin: 16mm;
+    }
+  }
+</style>
+
+<script>
+  document.getElementById("print-cv")?.addEventListener("click", () => window.print());
+</script>

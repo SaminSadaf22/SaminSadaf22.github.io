@@ -1,0 +1,17 @@
+{
+  "name": "Samin Sadaf — AI Researcher & Builder",
+  "short_name": "Samin Sadaf",
+  "description": "AI researcher and builder working on applied deep learning.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#090D16",
+  "theme_color": "#090D16",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

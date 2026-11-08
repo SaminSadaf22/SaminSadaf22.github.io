@@ -1,0 +1,78 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { projects } from "../data/projects";
+
+const filters = ["All", "AI Research", "Software Engineering"] as const;
+---
+
+<MainLayout
+  title="Projects"
+  description="Research and engineering projects by Samin Sadaf."
+>
+  <section class="border-b border-line py-14">
+    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Work</p>
+    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">Projects</h1>
+    <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted">
+      Applied research first, software engineering second.
+    </p>
+  </section>
+
+  <section class="py-10">
+    <div class="flex flex-wrap gap-2" role="group" aria-label="Filter projects">
+      {filters.map((filter, index) => (
+        <button
+          type="button"
+          data-filter={filter}
+          aria-pressed={index === 0 ? "true" : "false"}
+          class="border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted hover:border-muted hover:text-ink aria-pressed:border-mint aria-pressed:text-mint"
+        >
+          {filter}
+        </button>
+      ))}
+    </div>
+
+    <ul class="mt-8 grid gap-px border border-line bg-line md:grid-cols-2">
+      {projects.map((project) => (
+        <li data-category={project.category} class="bg-canvas">
+          <div class="flex h-full flex-col p-6 sm:p-8">
+            <p class:list={[
+              "font-mono text-[10px] uppercase tracking-[0.18em]",
+              project.href ? "text-mint" : "text-faint",
+            ]}>
+              {project.category}
+            </p>
+            <h2 class="mt-3 font-display text-xl font-medium tracking-tight text-ink">{project.title}</h2>
+            <p class="mt-3 flex-1 text-sm leading-relaxed text-muted">{project.summary}</p>
+            <p class="mt-5 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">{project.period}</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              {project.tags.map((tag) => (
+                <span class="border border-line px-2 py-0.5 font-mono text-[10px] tracking-[0.1em] text-faint">{tag}</span>
+              ))}
+            </div>
+            {project.href && (
+              <a href={project.href} class="mt-6 font-mono text-[10px] uppercase tracking-[0.18em] text-muted hover:text-mint">
+                Read the study →
+              </a>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+  </section>
+</MainLayout>
+
+<script>
+  const buttons = document.querySelectorAll<HTMLButtonElement>("[data-filter]");
+  const cards = document.querySelectorAll<HTMLElement>("[data-category]");
+
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const filter = button.dataset.filter;
+      buttons.forEach((other) => other.setAttribute("aria-pressed", String(other === button)));
+      cards.forEach((card) => {
+        const matches = filter === "All" || card.dataset.category === filter;
+        card.classList.toggle("hidden", !matches);
+      });
+    });
+  });
+</script>

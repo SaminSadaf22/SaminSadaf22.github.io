@@ -1,0 +1,104 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { site } from "../data/site";
+
+const principles = [
+  {
+    title: "Report what the model actually did",
+    body: "A number is only useful if someone can re-run it. Datasets, splits and seeds get documented alongside the result, not after it.",
+  },
+  {
+    title: "Prefer the boring baseline",
+    body: "New architectures are easy to justify after the fact. I try to establish what a simpler model achieves first, then argue for complexity with evidence.",
+  },
+  {
+    title: "Build the thing, not just the notebook",
+    body: "A trained model that nobody can run is a claim, not a system. I care about the path from experiment to something usable.",
+  },
+];
+---
+
+<MainLayout
+  title="About"
+  description="About Samin Sadaf — an AI researcher and builder working on applied deep learning, based in Dhaka, Bangladesh."
+>
+  <section class="border-b border-line py-14">
+    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Profile</p>
+    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">About</h1>
+  </section>
+
+  <section class="grid gap-12 py-14 lg:grid-cols-[1fr_280px]">
+    <div class="space-y-6 text-base leading-relaxed text-muted">
+      <p>
+        I'm an AI researcher and builder based in {site.location}. My work sits
+        at the intersection of applied deep learning and the practical question
+        of whether a model does anything useful outside a notebook.
+      </p>
+      <p>
+        My undergraduate thesis compared two convolutional architectures,
+        DenseNet121 and EfficientNet-B0, for detecting disease in corn leaves
+        from images. It was my first sustained piece of research, and the most
+        valuable part wasn't the modelling — it was learning how much of a
+        result depends on decisions made before training starts: how the data is
+        split, what is held out, and what the number on the screen actually
+        describes.
+      </p>
+      <p>
+        I studied software engineering at Daffodil International University,
+        graduating in June 2026. That background shapes how I approach research:
+        I'd rather ship something reproducible than something impressive. It
+        also means I can build the surrounding system — the interface, the
+        packaging, the documentation — not just the experiment.
+      </p>
+      <p>
+        I'm at the beginning of a research career and I'd rather say that plainly
+        than inflate it. What I have is a body of work I can explain end to end,
+        and a clear direction: computer vision applied to problems where the
+        data is messy and the stakes are real.
+      </p>
+    </div>
+
+    <aside class="space-y-8 lg:border-l lg:border-line lg:pl-8">
+      <div>
+        <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Based in</p>
+        <p class="mt-2 text-sm text-ink">{site.location}</p>
+      </div>
+      <div>
+        <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Focus</p>
+        <p class="mt-2 text-sm text-ink">Applied deep learning, computer vision</p>
+      </div>
+      <div>
+        <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Elsewhere</p>
+        <ul class="mt-2 space-y-1">
+          {site.socials.map((social) => (
+            <li>
+              <a
+                href={social.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-sm text-muted underline decoration-line underline-offset-4 hover:text-mint"
+              >
+                {social.label} ↗
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <section class="border-t border-line py-14">
+    <h2 class="font-display text-xl font-medium tracking-tight">How I work</h2>
+    <div class="mt-8 grid gap-px border border-line bg-line sm:grid-cols-3">
+      {principles.map((principle, index) => (
+        <div class="bg-canvas p-6">
+          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
+            {String(index + 1).padStart(2, "0")}
+          </p>
+          <h3 class="mt-4 font-display text-base font-medium tracking-tight text-ink">{principle.title}</h3>
+          <p class="mt-3 text-sm leading-relaxed text-muted">{principle.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+</MainLayout>

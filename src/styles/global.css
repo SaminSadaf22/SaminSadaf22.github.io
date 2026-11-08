@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@theme {
+  --color-canvas: #090d16;
+  --color-surface: #0e1420;
+  --color-card: #121a28;
+  --color-raised: #182334;
+  --color-line: #253247;
+  --color-ink: #f1f5f9;
+  --color-muted: #a3b1c2;
+  --color-faint: #718096;
+  --color-mint: #77e5d4;
+  --color-azure: #78a9ff;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", var(--font-sans);
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    background-color: var(--color-canvas);
+    color: var(--color-ink);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    /* Faint technical grid: do not let this compete with content. */
+    background-image:
+      linear-gradient(to right, rgb(37 50 71 / 0.35) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(37 50 71 / 0.35) 1px, transparent 1px);
+    background-size: 64px 64px;
+  }
+
+  ::selection {
+    background-color: var(--color-mint);
+    color: var(--color-canvas);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-mint);
+    outline-offset: 3px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}

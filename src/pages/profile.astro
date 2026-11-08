@@ -1,0 +1,42 @@
+---
+import MainLayout from "../layouts/MainLayout.astro";
+import { skillGroups } from "../data/profile";
+---
+
+<MainLayout
+  title="Technical Profile"
+  description="Technical profile of Samin Sadaf — languages, research methods and engineering environment."
+>
+  <section class="border-b border-line py-14">
+    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Capabilities</p>
+    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">Technical Profile</h1>
+    <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted">
+      What I work with, listed plainly. No proficiency scores — a number would
+      say less than the projects do.
+    </p>
+  </section>
+
+  <section class="py-14">
+    <div class="grid gap-px border border-line bg-line sm:grid-cols-2">
+      {skillGroups.map((group) => (
+        <div class="bg-canvas p-6 sm:p-8">
+          <h2 class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">{group.title}</h2>
+          <ul class="mt-4 space-y-2">
+            {group.items.map((item) => (
+              <li class="flex items-center gap-3 text-sm text-muted">
+                <span class="h-1 w-1 shrink-0 bg-line" aria-hidden="true" />
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <p class="mt-8 max-w-2xl text-sm leading-relaxed text-muted">
+      Deep learning frameworks are documented through the work itself — see the
+      thesis page for the stack behind each result — rather than as a list of
+      logos here.
+    </p>
+  </section>
+</MainLayout>
