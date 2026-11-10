@@ -1,0 +1,10 @@
+[
+  {
+    "slug": "digital-service-booking-system",
+    "title": "Digital Service Booking System",
+    "category": "Software Engineering",
+    "period": "Software engineering project",
+    "summary": "A Django application for managing service bookings, built before my focus moved to applied machine learning.",
+    "tags": ["Django", "Python", "Relational database"]
+  }
+]

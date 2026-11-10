@@ -1,0 +1,34 @@
+{
+  "skillGroups": [
+    {
+      "title": "Languages",
+      "items": ["Python", "TypeScript", "JavaScript", "SQL"]
+    },
+    {
+      "title": "Research methods",
+      "items": ["Transfer learning", "Image classification", "Data preprocessing", "Evaluation design"]
+    },
+    {
+      "title": "Web engineering",
+      "items": ["Astro", "Django", "Tailwind CSS", "REST APIs"]
+    },
+    {
+      "title": "Environment",
+      "items": ["Git", "Linux", "Jupyter"]
+    }
+  ],
+  "researchInterests": [
+    {
+      "title": "Agricultural computer vision",
+      "detail": "Disease detection from leaf imagery, where lighting, background and class imbalance are the real difficulty."
+    },
+    {
+      "title": "Evaluation under uncertainty",
+      "detail": "Per-class reporting, calibration and split hygiene — what decides whether an accuracy figure means anything."
+    },
+    {
+      "title": "Efficient transfer learning",
+      "detail": "What a pretrained backbone buys when compute and labelled data are both limited."
+    }
+  ]
+}
