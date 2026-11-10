@@ -1,0 +1,569 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["aether", className]} data-aether tabindex="0" aria-label="Aether Drift mini game">
+  <canvas data-canvas width="480" height="280"></canvas>
+  <div class="aether-hud" aria-hidden="true">
+    <div class="aether-title">
+      <span>AETHER DRIFT</span>
+      <span data-mode>ATTRACT</span>
+    </div>
+    <div class="aether-stats">
+      <span data-score>0</span>
+      <span data-shield> shields 3</span>
+    </div>
+  </div>
+  <div class="aether-footer" aria-hidden="true">
+    <span data-status>Auto-pilot engaged · Click or Space to take control</span>
+    <button type="button" data-restart>Reset</button>
+  </div>
+</div>
+
+<style>
+  .aether {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    outline: none;
+    background: #050812;
+  }
+
+  .aether canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: auto;
+    touch-action: none;
+  }
+
+  .aether-hud,
+  .aether-footer {
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6b7280;
+    pointer-events: none;
+  }
+
+  .aether-hud {
+    top: 0.75rem;
+  }
+
+  .aether-title,
+  .aether-stats {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .aether-title span:first-child {
+    color: #5eead4;
+  }
+
+  .aether-footer {
+    bottom: 0.75rem;
+  }
+
+  .aether-footer button {
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(5, 8, 18, 0.7);
+    color: #94a3b8;
+    border-radius: 0.375rem;
+    padding: 0.125rem 0.375rem;
+    cursor: pointer;
+  }
+
+  .aether-footer button:hover {
+    color: #5eead4;
+    border-color: rgba(94, 234, 212, 0.4);
+  }
+</style>
+
+<script>
+  const initAether = (root) => {
+    const canvas = root.querySelector("[data-canvas]");
+    const ctx = canvas.getContext("2d");
+    const modeEl = root.querySelector("[data-mode]");
+    const scoreEl = root.querySelector("[data-score]");
+    const shieldEl = root.querySelector("[data-shield]");
+    const statusEl = root.querySelector("[data-status]");
+    const restartBtn = root.querySelector("[data-restart]");
+
+    const W = canvas.width;
+    const H = canvas.height;
+
+    const player = {
+      x: 92,
+      y: H / 2,
+      vy: 0,
+      radius: 10,
+      trail: [],
+      invuln: 0,
+      boost: 0,
+      boostCooldown: 0,
+    };
+
+    let obstacles = [];
+    let shards = [];
+    let particles = [];
+    let stars = [];
+    let gridOffset = 0;
+    let score = 0;
+    let shield = 3;
+    let level = 1;
+    let frame = 0;
+    let spawnTimer = 0;
+    let mode = "attract";
+    let visible = true;
+    let raf = null;
+    let best = 0;
+
+    const keys = { up: false, down: false };
+
+    const isTyping = (target) =>
+      !!target &&
+      (target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable);
+
+    const resetRun = (nextMode) => {
+      obstacles = [];
+      shards = [];
+      particles = [];
+      score = 0;
+      shield = 3;
+      level = 1;
+      frame = 0;
+      spawnTimer = 40;
+      player.y = H / 2;
+      player.vy = 0;
+      player.trail = [];
+      player.invuln = 0;
+      player.boost = 0;
+      player.boostCooldown = 0;
+      mode = nextMode;
+      modeEl.textContent = nextMode === "attract" ? "ATTRACT" : "CONTROL";
+      statusEl.textContent =
+        nextMode === "attract"
+          ? "Auto-pilot engaged · Click or Space to take control"
+          : "You have control · Arrows/W/S move · Space boosts";
+      scoreEl.textContent = "0";
+      shieldEl.textContent = " shields " + shield;
+    };
+
+    const spawnObstacle = () => {
+      const gap = 118 - Math.min(34, level * 4);
+      const top = 34 + Math.random() * (H - gap - 68);
+      const bottom = top + gap;
+      const x = W + 30;
+      obstacles.push({ x, w: 22, top, bottom, passed: false, hue: 280 + Math.random() * 40 });
+      if (Math.random() < 0.7) {
+        shards.push({
+          x: x + 11,
+          y: (top + bottom) / 2 + (Math.random() - 0.5) * (gap * 0.35),
+          r: 5,
+          spin: Math.random() * Math.PI * 2,
+          collected: false,
+        });
+      }
+    };
+
+    const takeControl = () => {
+      if (mode === "playing") return;
+      resetRun("playing");
+    };
+
+    const boost = () => {
+      if (mode !== "playing") {
+        takeControl();
+        return;
+      }
+      if (player.boostCooldown <= 0) {
+        player.boost = 28;
+        player.boostCooldown = 120;
+      }
+    };
+
+    const spawnParticles = (x, y, color, count) => {
+      for (let i = 0; i < count; i += 1) {
+        const angle = (Math.PI * 2 * i) / count + Math.random() * 0.4;
+        const speed = 1 + Math.random() * 2.5;
+        particles.push({
+          x,
+          y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          life: 24 + Math.random() * 12,
+          color,
+        });
+      }
+    };
+
+    const hitPlayer = () => {
+      if (player.invuln > 0 || mode !== "playing") return;
+      shield -= 1;
+      player.invuln = 52;
+      spawnParticles(player.x, player.y, "#f87171", 18);
+      shieldEl.textContent = " shields " + shield;
+      if (shield <= 0) {
+        mode = "over";
+        best = Math.max(best, score);
+        modeEl.textContent = "LOST";
+        statusEl.textContent =
+          "Signal lost · Score " + score + " · Click or Space to re-enter";
+      }
+    };
+
+    const update = () => {
+      frame += 1;
+      gridOffset = (gridOffset + (mode === "playing" && player.boost > 0 ? 3.4 : 2.2)) % 40;
+      stars.forEach((star) => {
+        star.x -= star.speed * (mode === "playing" && player.boost > 0 ? 1.7 : 1);
+        if (star.x < 0) {
+          star.x = W;
+          star.y = Math.random() * H;
+        }
+      });
+
+      if (mode === "over") return;
+
+      const speed = 2.4 + level * 0.18 + (mode === "playing" && player.boost > 0 ? 2.2 : 0);
+      obstacles.forEach((obstacle) => {
+        obstacle.x -= speed;
+      });
+      shards.forEach((shard) => {
+        shard.x -= speed;
+        shard.spin += 0.08;
+      });
+      particles.forEach((particle) => {
+        particle.x += particle.vx;
+        particle.y += particle.vy;
+        particle.vx *= 0.96;
+        particle.vy *= 0.96;
+        particle.life -= 1;
+      });
+
+      obstacles = obstacles.filter((obstacle) => obstacle.x + obstacle.w > -20);
+      shards = shards.filter((shard) => shard.x > -20 && !shard.collected);
+      particles = particles.filter((particle) => particle.life > 0);
+
+      spawnTimer -= 1;
+      if (spawnTimer <= 0) {
+        spawnObstacle();
+        spawnTimer = Math.max(58, 96 - level * 5);
+      }
+
+      obstacles.forEach((obstacle) => {
+        if (!obstacle.passed && obstacle.x + obstacle.w < player.x - player.radius) {
+          obstacle.passed = true;
+          score += 5;
+          level = 1 + Math.floor(score / 90);
+          scoreEl.textContent = String(score);
+        }
+      });
+
+      shards.forEach((shard) => {
+        if (
+          !shard.collected &&
+          Math.hypot(shard.x - player.x, shard.y - player.y) < player.radius + shard.r + 2
+        ) {
+          shard.collected = true;
+          score += 12;
+          spawnParticles(shard.x, shard.y, "#5eead4", 10);
+          scoreEl.textContent = String(score);
+        }
+      });
+
+      if (mode === "attract") {
+        const next = obstacles
+          .filter((obstacle) => obstacle.x + obstacle.w > player.x)
+          .sort((a, b) => a.x - b.x)[0];
+        const targetY = next
+          ? (next.top + next.bottom) / 2
+          : H / 2;
+        player.vy += (targetY - player.y) * 0.035;
+        player.vy *= 0.86;
+        player.y += player.vy;
+      } else {
+        if (keys.up) player.vy -= 0.7;
+        if (keys.down) player.vy += 0.7;
+        player.vy *= 0.88;
+        player.y += player.vy;
+        if (player.boost > 0) player.boost -= 1;
+        if (player.boostCooldown > 0) player.boostCooldown -= 1;
+      }
+
+      player.y = Math.max(player.radius + 8, Math.min(H - player.radius - 8, player.y));
+      player.trail.unshift({ x: player.x, y: player.y });
+      player.trail = player.trail.slice(0, 10);
+      if (player.invuln > 0) player.invuln -= 1;
+
+      obstacles.forEach((obstacle) => {
+        const inX =
+          player.x + player.radius > obstacle.x &&
+          player.x - player.radius < obstacle.x + obstacle.w;
+        if (!inX) return;
+        if (player.y - player.radius < obstacle.top || player.y + player.radius > obstacle.bottom) {
+          hitPlayer();
+        }
+      });
+    };
+
+    const drawShip = () => {
+      const flicker = player.invuln > 0 && Math.floor(frame / 4) % 2 === 0;
+      if (flicker) return;
+      ctx.save();
+      ctx.translate(player.x, player.y);
+      ctx.fillStyle = "#5eead4";
+      ctx.beginPath();
+      ctx.moveTo(14, 0);
+      ctx.lineTo(-10, -9);
+      ctx.lineTo(-5, 0);
+      ctx.lineTo(-10, 9);
+      ctx.closePath();
+      ctx.fill();
+      ctx.fillStyle = "#050812";
+      ctx.fillRect(-2, -2, 4, 4);
+      ctx.fillStyle = player.boost > 0 ? "#fde68a" : "#38bdf8";
+      ctx.fillRect(-13, -3, 6 + (player.boost > 0 ? 6 : 0), 6);
+      ctx.restore();
+
+      player.trail.forEach((point, index) => {
+        ctx.globalAlpha = (1 - index / player.trail.length) * 0.35;
+        ctx.fillStyle = "#5eead4";
+        ctx.fillRect(point.x - 12 - index, point.y - 1, 8, 2);
+      });
+      ctx.globalAlpha = 1;
+    };
+
+    const draw = () => {
+      ctx.fillStyle = "#050812";
+      ctx.fillRect(0, 0, W, H);
+
+      const glow = ctx.createRadialGradient(W * 0.75, H * 0.35, 20, W * 0.75, H * 0.35, 180);
+      glow.addColorStop(0, "rgba(94, 234, 212, 0.12)");
+      glow.addColorStop(1, "rgba(5, 8, 18, 0)");
+      ctx.fillStyle = glow;
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.strokeStyle = "rgba(94, 234, 212, 0.08)";
+      ctx.lineWidth = 1;
+      for (let x = -gridOffset; x < W; x += 40) {
+        ctx.beginPath();
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, H);
+        ctx.stroke();
+      }
+      for (let y = 0; y < H; y += 40) {
+        ctx.beginPath();
+        ctx.moveTo(0, y);
+        ctx.lineTo(W, y);
+        ctx.stroke();
+      }
+
+      stars.forEach((star) => {
+        ctx.globalAlpha = star.a;
+        ctx.fillStyle = star.color;
+        ctx.fillRect(star.x, star.y, star.s, star.s);
+      });
+      ctx.globalAlpha = 1;
+
+      obstacles.forEach((obstacle) => {
+        const gradient = ctx.createLinearGradient(obstacle.x, 0, obstacle.x + obstacle.w, 0);
+        gradient.addColorStop(0, "rgba(167, 139, 250, 0.18)");
+        gradient.addColorStop(0.5, "rgba(248, 113, 113, 0.34)");
+        gradient.addColorStop(1, "rgba(167, 139, 250, 0.18)");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(obstacle.x, 0, obstacle.w, obstacle.top);
+        ctx.fillRect(obstacle.x, obstacle.bottom, obstacle.w, H - obstacle.bottom);
+
+        ctx.strokeStyle = "rgba(248, 113, 113, 0.65)";
+        ctx.lineWidth = 1;
+        ctx.strokeRect(obstacle.x + 0.5, 0.5, obstacle.w - 1, obstacle.top - 1);
+        ctx.strokeRect(obstacle.x + 0.5, obstacle.bottom + 0.5, obstacle.w - 1, H - obstacle.bottom - 1);
+
+        for (let y = 0; y < obstacle.top; y += 9) {
+          ctx.fillStyle = "rgba(255, 255, 255, 0.08)";
+          ctx.fillRect(obstacle.x + 2, y + ((frame >> 2) % 9), obstacle.w - 4, 2);
+        }
+      });
+
+      shards.forEach((shard) => {
+        ctx.save();
+        ctx.translate(shard.x, shard.y);
+        ctx.rotate(shard.spin);
+        ctx.fillStyle = "#5eead4";
+        ctx.beginPath();
+        ctx.moveTo(0, -shard.r);
+        ctx.lineTo(shard.r, 0);
+        ctx.lineTo(0, shard.r);
+        ctx.lineTo(-shard.r, 0);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+      });
+
+      particles.forEach((particle) => {
+        ctx.globalAlpha = Math.max(0, particle.life / 36);
+        ctx.fillStyle = particle.color;
+        ctx.fillRect(particle.x, particle.y, 2, 2);
+      });
+      ctx.globalAlpha = 1;
+
+      drawShip();
+
+      ctx.fillStyle = "#6b7280";
+      ctx.font = "10px monospace";
+      ctx.textAlign = "left";
+      ctx.fillText("SCORE " + score, 10, 16);
+      ctx.textAlign = "right";
+      ctx.fillText("SHIELD " + shield, W - 10, 16);
+      ctx.textAlign = "left";
+
+      if (mode === "attract") {
+        ctx.fillStyle = "rgba(5, 8, 18, 0.42)";
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = "#5eead4";
+        ctx.font = "bold 24px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText("AETHER DRIFT", W / 2, H / 2 - 12);
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "12px monospace";
+        ctx.fillText("ATTRACT MODE", W / 2, H / 2 + 12);
+        ctx.font = "10px monospace";
+        ctx.fillText("Click or press Space to take control", W / 2, H / 2 + 34);
+        ctx.textAlign = "left";
+      } else if (mode === "over") {
+        ctx.fillStyle = "rgba(5, 8, 18, 0.62)";
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = "#f87171";
+        ctx.font = "bold 24px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText("SIGNAL LOST", W / 2, H / 2 - 16);
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "12px monospace";
+        ctx.fillText("Score " + score + " · Best " + best, W / 2, H / 2 + 10);
+        ctx.font = "10px monospace";
+        ctx.fillText("Click or press Space to re-enter", W / 2, H / 2 + 34);
+        ctx.textAlign = "left";
+      }
+    };
+
+    const loop = () => {
+      if (visible) {
+        update();
+        draw();
+      }
+      raf = requestAnimationFrame(loop);
+    };
+
+    stars = Array.from({ length: 70 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      s: Math.random() < 0.15 ? 2 : 1,
+      speed: 0.3 + Math.random() * 0.9,
+      a: 0.25 + Math.random() * 0.75,
+      color: Math.random() < 0.2 ? "#5eead4" : "#ffffff",
+    }));
+
+    resetRun("attract");
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        visible = entries[0]?.isIntersecting ?? true;
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(root);
+
+    const onKeyDown = (event) => {
+      if (isTyping(event.target)) return;
+      if (event.code === "ArrowUp" || event.code === "KeyW") {
+        keys.up = true;
+        event.preventDefault();
+      } else if (event.code === "ArrowDown" || event.code === "KeyS") {
+        keys.down = true;
+        event.preventDefault();
+      } else if (event.code === "Space") {
+        event.preventDefault();
+        boost();
+      }
+    };
+
+    const onKeyUp = (event) => {
+      if (event.code === "ArrowUp" || event.code === "KeyW") keys.up = false;
+      if (event.code === "ArrowDown" || event.code === "KeyS") keys.down = false;
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    let pointerDown = false;
+    let moved = false;
+    let startY = 0;
+    let downTime = 0;
+
+    canvas.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      pointerDown = true;
+      moved = false;
+      startY = event.clientY;
+      downTime = Date.now();
+      root.focus({ preventScroll: true });
+      if (mode !== "playing") takeControl();
+      else boost();
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (!pointerDown) return;
+      event.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const y = (event.clientY - rect.top) * (H / rect.height);
+      if (Math.abs(event.clientY - startY) > 4) moved = true;
+      player.y = Math.max(player.radius + 8, Math.min(H - player.radius - 8, y));
+      player.vy = 0;
+    });
+
+    canvas.addEventListener("pointerup", () => {
+      pointerDown = false;
+    });
+
+    canvas.addEventListener("pointerleave", () => {
+      pointerDown = false;
+    });
+
+    restartBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      resetRun(mode === "attract" ? "attract" : "playing");
+      if (mode !== "attract") mode = "playing";
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (raf) {
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      } else if (!raf) {
+        raf = requestAnimationFrame(loop);
+      }
+    });
+
+    raf = requestAnimationFrame(loop);
+  };
+
+  document.querySelectorAll("[data-aether]").forEach(initAether);
+</script>
