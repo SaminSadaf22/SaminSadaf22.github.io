@@ -17,15 +17,33 @@ export const resume = {
   summary:
     "AI researcher and builder working on applied deep learning, most recently computer vision for agricultural disease detection. Software engineering graduate with a focus on evaluation that can be reproduced: documented data, honest splits, and results reported as they are.",
 
-  education: {
-    degree: "BSc in Software Engineering",
-    institution: "Daffodil International University",
-    location: "Dhaka, Bangladesh",
-    period: "Graduated June 2026",
-    detail:
-      "Thesis: Corn Leaf Disease Detection Using Deep Learning — a controlled comparison of DenseNet121 and EfficientNet-B0.",
-    href: "/education",
-  },
+  education: [
+    {
+      degree: "BSc in Software Engineering",
+      institution: "Daffodil International University",
+      location: "Dhaka, Bangladesh",
+      period: "Graduated June 2026",
+      detail:
+        "Thesis: Corn Leaf Disease Detection Using Deep Learning — a controlled comparison of DenseNet121 and EfficientNet-B0.",
+      href: "/education",
+    },
+    {
+      degree: "Higher Secondary Certificate (HSC), Science Group",
+      institution: "Ahammad Uddin Shah Shishu Niketan School and College",
+      location: "Gaibandha, Bangladesh",
+      period: "2019",
+      detail: "Higher secondary education in the Science group.",
+      href: "/education",
+    },
+    {
+      degree: "Secondary School Certificate (SSC), Science Group",
+      institution: "Collectorate Public School and College",
+      location: "Bogura, Bangladesh",
+      period: "2017",
+      detail: "Secondary education in the Science group.",
+      href: "/education",
+    },
+  ],
 
   research,
   engineering,

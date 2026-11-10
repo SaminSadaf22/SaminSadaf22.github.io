@@ -5,16 +5,16 @@ import { resume } from "../data/resume";
 import { site } from "../data/site";
 
 const entries = [
-  {
-    period: resume.education.period,
+  ...resume.education.map((item) => ({
+    period: item.period,
     tag: "Education",
-    title: resume.education.degree,
-    org: `${resume.education.institution} · ${resume.education.location}`,
-    body: resume.education.detail,
+    title: item.degree,
+    org: `${item.institution} · ${item.location}`,
+    body: item.detail,
     tags: [] as string[],
     href: "/education",
     linkLabel: "Education",
-  },
+  })),
   ...resume.research.map((project) => ({
     period: "2026",
     tag: "Research",

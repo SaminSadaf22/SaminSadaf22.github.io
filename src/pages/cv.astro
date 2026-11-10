@@ -94,22 +94,24 @@ const generated = new Date().toLocaleDateString("en-GB", {
           >
             Education
           </h3>
-          <div class="cv-entry mt-3">
-            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
-                {resume.education.degree}
-              </h4>
-              <p class="font-mono text-[9px] uppercase tracking-[0.14em] text-[#6b7280]">
-                {resume.education.period}
+          {resume.education.map((item) => (
+            <div class="cv-entry mt-3">
+              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+                <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
+                  {item.degree}
+                </h4>
+                <p class="font-mono text-[9px] uppercase tracking-[0.14em] text-[#6b7280]">
+                  {item.period}
+                </p>
+              </div>
+              <p class="mt-1 text-[13px] text-[#374151]">
+                {item.institution} · {item.location}
+              </p>
+              <p class="mt-2 text-[12px] leading-relaxed text-[#4b5563]">
+                {item.detail}
               </p>
             </div>
-            <p class="mt-1 text-[13px] text-[#374151]">
-              {resume.education.institution} · {resume.education.location}
-            </p>
-            <p class="mt-2 text-[12px] leading-relaxed text-[#4b5563]">
-              {resume.education.detail}
-            </p>
-          </div>
+          ))}
         </section>
 
         <section class="cv-section mt-7">
@@ -276,7 +278,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
     }
 
     .cv-header {
-      padding: 0 0 10pt !important;
+      padding: 0 0 8pt !important;
     }
 
     .cv-layout {
@@ -288,19 +290,19 @@ const generated = new Date().toLocaleDateString("en-GB", {
     }
 
     .cv-side {
-      margin-top: 14pt !important;
-      padding: 12pt 0 0 !important;
+      margin-top: 10pt !important;
+      padding: 10pt 0 0 !important;
       border: 0 !important;
       border-top: 1px solid #d7dde5 !important;
       background: transparent !important;
     }
 
     .cv-side section {
-      margin-top: 10pt !important;
+      margin-top: 8pt !important;
     }
 
     .cv-section {
-      margin-top: 14pt !important;
+      margin-top: 10pt !important;
       break-inside: auto;
       page-break-inside: auto;
     }
@@ -315,6 +317,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
     }
 
     .cv-entry {
+      margin-top: 8pt !important;
       break-inside: avoid;
       page-break-inside: avoid;
     }
@@ -326,7 +329,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
     @page {
       size: A4;
-      margin: 13mm 14mm;
+      margin: 11mm 12mm;
     }
   }
 </style>
