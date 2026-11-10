@@ -41,9 +41,9 @@ const secondary = projects[1];
   <!-- Hero -->
   <section
     id="top"
-    class="relative grid scroll-mt-28 items-center gap-14 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.06fr_0.94fr] lg:gap-12 lg:pt-24"
+    class="relative grid grid-cols-1 scroll-mt-28 items-center gap-14 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.06fr_0.94fr] lg:gap-12 lg:pt-24"
   >
-    <div class="reveal">
+    <div class="reveal min-w-0">
       <div
         class="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 backdrop-blur"
       >
@@ -112,7 +112,7 @@ const secondary = projects[1];
     </div>
 
     <!-- Hero terminal -->
-    <div class="reveal relative" style="transition-delay: 120ms">
+    <div class="reveal relative min-w-0" style="transition-delay: 120ms">
       <div
         class="absolute -inset-5 rounded-[2.5rem] bg-linear-to-br from-mint/20 via-transparent to-violet/20 blur-3xl"
         aria-hidden="true"
@@ -478,7 +478,7 @@ const secondary = projects[1];
           Contact
         </p>
         <h2 class="mt-5 font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
-          Let's work on something
+          Let's work on something{" "}
           <span class="text-gradient">worth evaluating.</span>
         </h2>
         <p class="mt-4 text-sm leading-relaxed text-muted sm:text-base">
@@ -498,8 +498,10 @@ const secondary = projects[1];
           </button>
         </div>
 
-        <p class="mt-6 break-all font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
-          {site.email} · {site.phone}
+        <p class="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+          <span class="break-all">{site.email}</span>
+          <span class="hidden sm:inline"> · </span>
+          <span class="block whitespace-nowrap sm:inline">{site.phone}</span>
         </p>
       </div>
     </div>

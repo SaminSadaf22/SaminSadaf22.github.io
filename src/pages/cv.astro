@@ -127,19 +127,21 @@ const contactLinks = [
             </div>
             <p class="cv-org">{project.category}</p>
             <p class="cv-detail">{project.summary}</p>
-            {project.category === "AI Research" && (
-              <ul class="cv-bullets">
-                {resume.thesisHighlights.map((highlight) => (
-                  <li>{highlight}</li>
-                ))}
-              </ul>
+            {project.slug === "corn-leaf-disease" && (
+              <>
+                <ul class="cv-bullets">
+                  {resume.thesisHighlights.map((highlight) => (
+                    <li>{highlight}</li>
+                  ))}
+                </ul>
+                <p class="cv-app">
+                  <a href={resume.thesisApp} target="_blank" rel="noopener noreferrer">
+                    Deployed app: {resume.thesisAppTitle} ↗
+                  </a>
+                </p>
+              </>
             )}
             <p class="cv-tags">{project.tags.join(" · ")}</p>
-            <p class="cv-app">
-              <a href={resume.thesisApp} target="_blank" rel="noopener noreferrer">
-                Deployed app: {resume.thesisAppTitle} ↗
-              </a>
-            </p>
           </div>
         ))}
       </section>
