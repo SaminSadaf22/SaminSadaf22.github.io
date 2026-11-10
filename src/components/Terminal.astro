@@ -82,35 +82,20 @@ const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
     ))}
   </div>
 
-  <!-- Static index for the shell; hidden from people and assistive tech. -->
-  <div hidden data-cli-index>
-    {insights.map((insight) => (
-      <article
-        data-insight
-        data-id={insight.id}
-        data-keywords={insight.keywords.join(" ")}
-      >
-        <h3 data-title>{insight.title}</h3>
-        <p data-body>{insight.body}</p>
-        {insight.links && (
-          <ul>
-            {insight.links.map((link) => (
-              <li>
-                <a href={link.href} data-link>{link.label}</a>
-              </li>
-            ))}
-          </ul>
-        )}
-      </article>
-    ))}
-  </div>
+  <!-- Inert data for the shell, kept out of the readable page text. -->
+  <script
+    type="application/json"
+    data-cli-index
+    is:inline
+    set:html={JSON.stringify(insights)}
+  ></script>
 </section>
 
 <script>
   const output = document.querySelector<HTMLElement>("[data-cli-output]");
   const form = document.querySelector<HTMLFormElement>("[data-cli-form]");
   const input = document.getElementById("cli-input") as HTMLInputElement | null;
-  const index = document.querySelector<HTMLElement>("[data-cli-index]");
+  const index = document.querySelector<HTMLScriptElement>("[data-cli-index]");
   const shell = document.querySelector<HTMLElement>("[data-terminal]");
 
   if (output && form && input && index) {
@@ -122,18 +107,28 @@ const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
       links: { label: string; href: string }[];
     };
 
-    const entries: Entry[] = Array.from(index.querySelectorAll<HTMLElement>("[data-insight]")).map(
-      (node) => ({
-        id: node.dataset.id ?? "",
-        title: node.querySelector("[data-title]")?.textContent ?? "",
-        keywords: (node.dataset.keywords ?? "").toLowerCase(),
-        body: node.querySelector("[data-body]")?.textContent ?? "",
-        links: Array.from(node.querySelectorAll<HTMLAnchorElement>("[data-link]")).map((link) => ({
-          label: link.textContent ?? "",
-          href: link.getAttribute("href") ?? "#",
-        })),
-      }),
-    );
+    type RawInsight = {
+      id: string;
+      title: string;
+      keywords: string[];
+      body: string;
+      links?: { label: string; href: string }[];
+    };
+
+    let raw: RawInsight[] = [];
+    try {
+      raw = JSON.parse(index.textContent || "[]") as RawInsight[];
+    } catch {
+      raw = [];
+    }
+
+    const entries: Entry[] = raw.map((entry) => ({
+      id: entry.id,
+      title: entry.title,
+      keywords: entry.keywords.join(" ").toLowerCase(),
+      body: entry.body,
+      links: entry.links ?? [],
+    }));
 
     const history: string[] = [];
     let historyIndex = 0;
