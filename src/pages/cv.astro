@@ -135,6 +135,11 @@ const contactLinks = [
               </ul>
             )}
             <p class="cv-tags">{project.tags.join(" · ")}</p>
+            <p class="cv-app">
+              <a href={resume.thesisApp} target="_blank" rel="noopener noreferrer">
+                Deployed app: {resume.thesisAppTitle} ↗
+              </a>
+            </p>
           </div>
         ))}
       </section>
@@ -182,6 +187,11 @@ const contactLinks = [
           <li>
             <a href={resume.thesisRepo} target="_blank" rel="noopener noreferrer">
               Thesis repository
+            </a>
+          </li>
+          <li>
+            <a href={resume.thesisApp} target="_blank" rel="noopener noreferrer">
+              Deployed app
             </a>
           </li>
         </ul>
@@ -248,6 +258,16 @@ const contactLinks = [
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: #6b7280;
+  }
+
+  .cv-app {
+    margin-top: 6px;
+    font-size: 12px;
+  }
+
+  .cv-app a {
+    color: #0f766e;
+    text-decoration: none;
   }
 
   .cv-skill-row {

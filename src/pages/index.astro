@@ -8,6 +8,7 @@ import { site } from "../data/site";
 import { skillGroups, researchInterests } from "../data/profile";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
+import { thesis } from "../data/thesis";
 import { ArrowRight, ArrowUpRight, Copy, MapPin } from "@lucide/astro";
 
 const principles = [
@@ -110,7 +111,7 @@ const secondary = projects[1];
       </div>
     </div>
 
-    <!-- Thesis panel -->
+    <!-- Hero terminal -->
     <div class="reveal relative" style="transition-delay: 120ms">
       <div
         class="absolute -inset-5 rounded-[2.5rem] bg-linear-to-br from-mint/20 via-transparent to-violet/20 blur-3xl"
@@ -118,50 +119,9 @@ const secondary = projects[1];
       >
       </div>
 
-      <div
-        class="relative overflow-hidden rounded-3xl border border-white/10 bg-[#080d17]/85 p-1.5 shadow-[0_40px_90px_-50px_rgba(0,0,0,1)] backdrop-blur"
-      >
-        <div class="flex items-stretch border-b border-white/5">
-          <div class="flex min-w-0 items-center gap-2 px-3 py-2">
-            <span
-              class="grid h-4 w-4 shrink-0 place-items-center rounded-sm border border-mint/25 bg-mint/5 font-mono text-[8px] leading-none text-mint"
-              aria-hidden="true"
-            >
-              &gt;_
-            </span>
-            <span class="truncate font-mono text-[10px] tracking-[0.14em] text-faint">
-              terminal — ask
-            </span>
-          </div>
-          <div class="ml-auto flex shrink-0 items-stretch" aria-hidden="true">
-            <span class="grid w-6 place-items-center border-l border-white/5 font-mono text-[9px] leading-none text-faint/50">─</span>
-            <span class="grid w-6 place-items-center border-l border-white/5 font-mono text-[9px] leading-none text-faint/50">□</span>
-            <span class="grid w-7 place-items-center border-l border-white/5 font-mono text-[10px] leading-none text-faint/50">✕</span>
-          </div>
-        </div>
-
-        <div class="rounded-2xl border border-white/5 bg-[#060a12] p-5 sm:p-6">
-          <NeuralVisual />
-
-          <div class="mt-5 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
-            <div>
-              <p class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">Terminal</p>
-              <p class="mt-1.5 text-sm font-medium text-ink">Ask about my work</p>
-            </div>
-            <a
-              href="#terminal"
-              data-open-terminal
-              aria-label="Ask my terminal"
-              class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/10 text-muted transition-colors hover:border-mint/40 hover:text-mint"
-            >
-              <ArrowUpRight size={15} strokeWidth={1.75} aria-hidden="true" />
-            </a>
-          </div>
-
-          <p class="mt-4 font-mono text-[10px] text-faint">
-            Try: education · skills · projects · contact
-          </p>
-        </div>
+      <div class="relative space-y-4 rounded-3xl border border-white/10 bg-[#080d17]/85 p-4 shadow-[0_40px_90px_-50px_rgba(0,0,0,1)] backdrop-blur">
+        <NeuralVisual />
+        <Terminal compact />
       </div>
     </div>
   </section>
@@ -326,6 +286,15 @@ const secondary = projects[1];
                 Case study
                 <ArrowUpRight size={12} strokeWidth={1.75} aria-hidden="true" />
               </a>
+              <a
+                href={thesis.app.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted transition-colors hover:text-mint"
+              >
+                Deployed app
+                <ArrowUpRight size={12} strokeWidth={1.75} aria-hidden="true" />
+              </a>
             </div>
           </div>
         </article>
@@ -488,8 +457,6 @@ const secondary = projects[1];
   </section>
 
   <ResumeSection />
-
-  <Terminal />
 
   <!-- Contact CTA -->
   <section id="contact" class="reveal scroll-mt-28 py-16 sm:py-20">

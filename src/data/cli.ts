@@ -38,10 +38,11 @@ export const insights: CliInsight[] = [
       "comparison",
       "dataset",
     ],
-    body: "The thesis compares DenseNet121 and EfficientNet-B0 for classifying corn leaf disease from images, both fine-tuned from ImageNet weights. The split, augmentation and training budget were held fixed so the architecture comparison meant something. The dataset card, per-class metrics and comparison table ship with the thesis document — no accuracy quoted from memory.",
+    body: "The thesis compares DenseNet121 and EfficientNet-B0 for classifying corn leaf disease from images, both fine-tuned from ImageNet weights. The split, augmentation and training budget were held fixed so the architecture comparison meant something. The dataset card, per-class metrics and comparison table ship with the thesis document — no accuracy quoted from memory. The comparison is also deployed as a Gradio app on Hugging Face for disease detection and advisory.",
     links: [
       { label: "Read the study", href: "/projects/corn-leaf-disease" },
       { label: "Source and figures", href: "https://github.com/SaminSadaf22/diu-thesis" },
+      { label: "Deployed app", href: "https://huggingface.co/spaces/SAMINSADAF/Test01" },
     ],
   },
   {

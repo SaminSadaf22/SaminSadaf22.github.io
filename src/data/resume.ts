@@ -50,6 +50,8 @@ export const resume = {
   skills: skillGroups,
   publications,
   thesisRepo: thesis.repo,
+  thesisApp: thesis.app.url,
+  thesisAppTitle: thesis.app.title,
   siteUrl: site.url.replace(/^https?:\/\//, ""),
   contact: {
     email: site.email,
@@ -64,5 +66,6 @@ export const resume = {
     "Held the dataset, split, augmentation and training budget fixed for both backbones.",
     "Fine-tuned DenseNet121 and EfficientNet-B0 from ImageNet weights.",
     "Documented the protocol alongside the results so the comparison can be re-run.",
+    "Shipped the comparison as a Gradio app on Hugging Face for disease detection and advisory.",
   ],
 } as const;

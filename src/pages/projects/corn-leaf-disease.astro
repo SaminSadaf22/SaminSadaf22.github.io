@@ -105,6 +105,19 @@ const meta = [
   </section>
 
   <section class="border-b border-line py-14">
+    <h2 class="font-display text-xl font-medium tracking-tight">Deployed app</h2>
+    <p class="mt-4 max-w-2xl text-sm leading-relaxed text-muted">{thesis.app.description}</p>
+    <a
+      href={thesis.app.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="mt-6 inline-flex border border-line px-4 py-2 font-mono text-[10px] uppercase tracking-[0.16em] text-muted transition-colors hover:border-mint hover:text-mint"
+    >
+      Open {thesis.app.title} ↗
+    </a>
+  </section>
+
+  <section class="border-b border-line py-14">
     <h2 class="font-display text-xl font-medium tracking-tight">Limitations</h2>
     <ul class="mt-8 divide-y divide-line border-y border-line">
       {thesis.limitations.map((limitation) => (

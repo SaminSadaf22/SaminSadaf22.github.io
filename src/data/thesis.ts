@@ -23,6 +23,13 @@ export const thesis = {
   period: "2026",
   repo: "https://github.com/SaminSadaf22/diu-thesis",
 
+  app: {
+    title: "Corn Disease Detection & Advisory",
+    url: "https://huggingface.co/spaces/SAMINSADAF/Test01",
+    description:
+      "A deployed Gradio app that detects corn leaf disease from an uploaded image and returns treatment advice.",
+  },
+
   summary:
     "A controlled comparison of two convolutional backbones, DenseNet121 and EfficientNet-B0, for classifying corn leaf disease from images. The study was built around a question the accuracy headline usually hides: does an architecture comparison still hold once the split, the augmentation and the training budget are held fixed for both models?",
 

@@ -1,25 +1,43 @@
 ---
+interface Props {
+  compact?: boolean;
+}
+
+const { compact = false } = Astro.props;
+
 import { insights } from "../data/cli";
 import SectionHeading from "./SectionHeading.astro";
 
 const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
 ---
 
-<section id="terminal" class="reveal scroll-mt-28 border-t border-white/10 py-16 sm:py-20">
-  <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-    <SectionHeading
-      eyebrow="Terminal"
-      title="The short version, searchable"
-      description="A small read-only shell over the facts on this site. Type a question, a topic, or help."
-    />
-    <p class="hidden shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-faint sm:inline-flex">
-      <span class="h-1.5 w-1.5 rounded-full bg-mint" aria-hidden="true"></span>
-      Ctrl K to focus
-    </p>
-  </div>
+<section
+  id="terminal"
+  class:list={[
+    compact ? "relative" : "reveal scroll-mt-28 border-t border-white/10 py-16 sm:py-20",
+  ]}
+>
+  {
+    !compact && (
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <SectionHeading
+          eyebrow="Terminal"
+          title="The short version, searchable"
+          description="A small read-only shell over the facts on this site. Type a question, a topic, or help."
+        />
+        <p class="hidden shrink-0 items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-faint sm:inline-flex">
+          <span class="h-1.5 w-1.5 rounded-full bg-mint" aria-hidden="true"></span>
+          Ctrl K to focus
+        </p>
+      </div>
+    )
+  }
 
   <div
-    class="terminal-shell mt-8 overflow-hidden rounded-2xl border border-white/10 bg-[#050910] shadow-[0_40px_100px_-60px_rgba(0,0,0,1)] transition-[border-color,box-shadow] duration-300"
+    class:list={[
+      "terminal-shell overflow-hidden rounded-2xl border border-white/10 bg-[#050910] shadow-[0_40px_100px_-60px_rgba(0,0,0,1)] transition-[border-color,box-shadow] duration-300",
+      compact ? "mt-0" : "mt-8",
+    ]}
     data-terminal
   >
     <div class="flex items-stretch border-b border-white/10 bg-white/[0.025]">
@@ -46,7 +64,10 @@ const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
       role="log"
       aria-live="polite"
       aria-label="Terminal output"
-      class="h-64 overflow-y-auto px-4 py-4 font-mono text-[12px] leading-relaxed sm:h-80 sm:px-5"
+      class:list={[
+        "overflow-y-auto px-4 py-4 font-mono text-[12px] leading-relaxed sm:px-5",
+        compact ? "h-44" : "h-64 sm:h-80",
+      ]}
     >
     </div>
 
@@ -90,18 +111,20 @@ const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
     </div>
   </div>
 
-  <div class="mt-3 flex flex-wrap items-center gap-2">
-    <span class="font-mono text-[9px] uppercase tracking-[0.16em] text-faint">Try</span>
-    {suggestions.map((suggestion) => (
-      <button
-        type="button"
-        data-cli-suggest={suggestion}
-        class="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1 font-mono text-[10px] tracking-[0.06em] text-muted transition-colors hover:border-mint/40 hover:text-mint"
-      >
-        {suggestion}
-      </button>
-    ))}
-  </div>
+  {!compact && (
+    <div class="mt-3 flex flex-wrap items-center gap-2">
+      <span class="font-mono text-[9px] uppercase tracking-[0.16em] text-faint">Try</span>
+      {suggestions.map((suggestion) => (
+        <button
+          type="button"
+          data-cli-suggest={suggestion}
+          class="rounded-full border border-white/10 bg-white/[0.02] px-3 py-1 font-mono text-[10px] tracking-[0.06em] text-muted transition-colors hover:border-mint/40 hover:text-mint"
+        >
+          {suggestion}
+        </button>
+      ))}
+    </div>
+  )}
 
   <!-- Inert data for the shell, kept out of the readable page text. -->
   <script

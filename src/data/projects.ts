@@ -15,8 +15,8 @@ export const projects: Project[] = [
     category: "AI Research",
     period: "Undergraduate thesis · 2026",
     summary:
-      "A comparative study of DenseNet121 and EfficientNet-B0 for classifying corn leaf disease from images, developed as my thesis at Daffodil International University.",
-    tags: ["DenseNet121", "EfficientNet-B0", "Transfer learning"],
+      "A comparative study of DenseNet121 and EfficientNet-B0 for classifying corn leaf disease from images, developed as my thesis at Daffodil International University. Includes a deployed Gradio app on Hugging Face for disease detection and advisory.",
+    tags: ["DenseNet121", "EfficientNet-B0", "Transfer learning", "Gradio", "Hugging Face"],
     href: "/projects/corn-leaf-disease",
   },
   {
