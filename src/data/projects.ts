@@ -1,7 +1,7 @@
 export type Project = {
   slug: string;
   title: string;
-  category: "AI Research" | "Software Engineering";
+  category: "AI Research" | "Software Engineering" | "Side Project";
   period: string;
   summary: string;
   tags: string[];
@@ -27,5 +27,35 @@ export const projects: Project[] = [
     summary:
       "A Django application for managing bookings, built before my focus moved to applied machine learning.",
     tags: ["Django", "Python", "Relational database"],
+  },
+  {
+    slug: "task-cli",
+    title: "Task CLI",
+    category: "Side Project",
+    period: "2023 · side project",
+    summary:
+      "A tiny command-line to-do list in Python with add, list, done and clear commands. Tasks are stored in a local JSON file, with no database or external service.",
+    tags: ["Python", "CLI", "JSON"],
+    href: "https://github.com/SaminSadaf22/SaminSadaf22.github.io/tree/master/side-projects/task-cli",
+  },
+  {
+    slug: "md-to-html",
+    title: "Markdown to HTML",
+    category: "Side Project",
+    period: "2022 · side project",
+    summary:
+      "A dependency-free Markdown to HTML converter in Python. Handles headings, bold and italic text, inline code, unordered lists and paragraphs.",
+    tags: ["Python", "Text parsing", "CLI"],
+    href: "https://github.com/SaminSadaf22/SaminSadaf22.github.io/tree/master/side-projects/md-to-html",
+  },
+  {
+    slug: "image-renamer",
+    title: "Image Renamer",
+    category: "Side Project",
+    period: "2024 · side project",
+    summary:
+      "A small Python utility for batch-renaming image files with a consistent prefix and numbering. Includes a dry-run mode to preview changes before applying them.",
+    tags: ["Python", "Files", "CLI"],
+    href: "https://github.com/SaminSadaf22/SaminSadaf22.github.io/tree/master/side-projects/image-renamer",
   },
 ];

@@ -54,7 +54,7 @@ export const insights: CliInsight[] = [
     id: "projects",
     title: "Projects",
     keywords: ["projects", "work", "built", "build", "booking", "django", "software", "engineering"],
-    body: "Two entries: the corn leaf disease thesis, and a Django booking management system built before the focus moved to applied machine learning. The thesis has a full case study; the booking system is listed without a public write-up.",
+    body: "Two main entries: the corn leaf disease thesis, and a Django booking management system built before the focus moved to applied machine learning. A few small side projects (Task CLI, Markdown to HTML, Image Renamer) are also listed. The thesis has a full case study; the others are listed without a public write-up.",
     links: [{ label: "All projects", href: "/projects" }],
   },
   {
