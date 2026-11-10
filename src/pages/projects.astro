@@ -48,11 +48,23 @@ const filters = ["All", "AI Research", "Software Engineering", "Side Project"] a
                 <span class="border border-line px-2 py-0.5 font-mono text-[10px] tracking-[0.1em] text-faint">{tag}</span>
               ))}
             </div>
-            {project.href && (
-              <a href={project.href} class="mt-6 font-mono text-[10px] uppercase tracking-[0.18em] text-muted hover:text-mint">
-                {project.linkLabel ?? "Open project"} →
-              </a>
-            )}
+            <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2">
+              {project.href && (
+                <a href={project.href} class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted hover:text-mint">
+                  {project.linkLabel ?? "Open project"} →
+                </a>
+              )}
+              {project.repo && (
+                <a
+                  href={project.repo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint hover:text-mint"
+                >
+                  GitHub ↗
+                </a>
+              )}
+            </div>
           </div>
         </li>
       ))}

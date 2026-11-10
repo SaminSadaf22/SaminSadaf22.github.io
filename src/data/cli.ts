@@ -78,7 +78,7 @@ export const insights: CliInsight[] = [
     id: "projects",
     title: "Projects",
     keywords: ["projects", "work", "built", "build", "booking", "django", "software", "engineering"],
-    body: "Three main entries: the corn leaf disease thesis, a cognitive AI hypothesis and browser simulation, and a Django booking management system built before the focus moved to applied machine learning. A few small side projects (Task CLI, Markdown to HTML, Image Renamer) are also listed. The thesis and cognitive project have full case studies; the others are listed without a public write-up.",
+    body: "Three main entries: the corn leaf disease thesis, a cognitive AI hypothesis and browser simulation, and a Django booking management system built before the focus moved to applied machine learning. A few small side projects (Task CLI, Markdown to HTML, Image Renamer) are also listed, each in its own repository. The thesis and cognitive project have full case studies; the others are listed without a public write-up.",
     links: [{ label: "All projects", href: "/projects" }],
   },
   {

@@ -6,6 +6,7 @@ export type Project = {
   summary: string;
   tags: string[];
   href?: string;
+  repo?: string;
   linkLabel?: string;
 };
 
@@ -30,6 +31,7 @@ export const projects: Project[] = [
       "A small, inspectable cognitive loop that combines predictive processing, a two-channel global workspace, decaying memory, affect and action selection. Its “I feel” line is a generated self-report, not a claim of sentience.",
     tags: ["Global workspace", "Predictive processing", "Affect", "TypeScript"],
     href: "/projects/cognitive-ai",
+    repo: "https://github.com/SaminSadaf22/cognitive-ai",
     linkLabel: "Open hypothesis",
   },
   {
@@ -49,7 +51,7 @@ export const projects: Project[] = [
     summary:
       "A tiny command-line to-do list in Python with add, list, done and clear commands. Tasks are stored in a local JSON file, with no database or external service.",
     tags: ["Python", "CLI", "JSON"],
-    href: "https://github.com/SaminSadaf22/SaminSadaf22.github.io/tree/master/side-projects/task-cli",
+    href: "https://github.com/SaminSadaf22/task-cli",
   },
   {
     slug: "md-to-html",
@@ -59,7 +61,7 @@ export const projects: Project[] = [
     summary:
       "A dependency-free Markdown to HTML converter in Python. Handles headings, bold and italic text, inline code, unordered lists and paragraphs.",
     tags: ["Python", "Text parsing", "CLI"],
-    href: "https://github.com/SaminSadaf22/SaminSadaf22.github.io/tree/master/side-projects/md-to-html",
+    href: "https://github.com/SaminSadaf22/md-to-html",
   },
   {
     slug: "image-renamer",
@@ -69,6 +71,6 @@ export const projects: Project[] = [
     summary:
       "A small Python utility for batch-renaming image files with a consistent prefix and numbering. Includes a dry-run mode to preview changes before applying them.",
     tags: ["Python", "Files", "CLI"],
-    href: "https://github.com/SaminSadaf22/SaminSadaf22.github.io/tree/master/side-projects/image-renamer",
+    href: "https://github.com/SaminSadaf22/image-renamer",
   },
 ];
