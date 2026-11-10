@@ -19,14 +19,14 @@ import { nav, site } from "../data/site";
         </span>
       </a>
 
-      <nav aria-label="Primary" class="hidden xl:block">
-        <ul class="flex items-center gap-0.5">
+      <nav aria-label="Primary" class="min-w-0 flex-1 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+        <ul class="flex items-center gap-0.5 whitespace-nowrap">
           {nav.map((item) => (
             <li>
               <a
                 href={item.href}
                 data-nav-link={item.href}
-                class="nav-link inline-flex rounded-full px-3 py-2 text-[12px] text-muted transition-colors duration-200 hover:bg-white/5 hover:text-ink"
+                class="nav-link inline-flex whitespace-nowrap rounded-full px-2 py-2 text-[10px] text-muted transition-colors duration-200 hover:bg-white/5 hover:text-ink sm:px-3 sm:text-[12px]"
               >
                 {item.label}
               </a>
@@ -44,52 +44,9 @@ import { nav, site } from "../data/site";
           <span aria-hidden="true">↗</span>
         </a>
 
-        <button
-          type="button"
-          data-nav-toggle
-          aria-expanded="false"
-          aria-controls="mobile-nav"
-          class="inline-flex h-9 w-9 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-mint/40 hover:text-ink xl:hidden"
-        >
-          <span class="sr-only">Toggle navigation</span>
-          <svg width="16" height="16" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-            <path d="M2 5h14M2 9h14M2 13h14" />
-          </svg>
-        </button>
       </div>
     </div>
 
-    <div
-      id="mobile-nav"
-      data-nav-panel
-      class="mt-2 hidden max-h-[calc(100dvh-5.5rem)] overflow-y-auto rounded-2xl border border-white/10 bg-[#070b14]/95 backdrop-blur-xl xl:hidden"
-    >
-      <nav aria-label="Mobile" class="p-2">
-        <ul class="grid gap-0.5">
-          {nav.map((item) => (
-            <li>
-              <a
-                href={item.href}
-                data-nav-link={item.href}
-                class="nav-link-mobile flex items-center justify-between rounded-xl px-4 py-3 text-sm text-muted transition-colors hover:bg-white/5 hover:text-ink"
-              >
-                {item.label}
-                <span class="nav-dot h-1.5 w-1.5 rounded-full bg-mint" aria-hidden="true"></span>
-              </a>
-            </li>
-          ))}
-        </ul>
-        <a
-          href="/#contact"
-          class="mt-2 flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-mint to-azure px-4 py-3 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#04100f]"
-        >
-          Let's talk ↗
-        </a>
-        <p class="px-4 pb-1 pt-3 font-mono text-[9px] uppercase tracking-[0.14em] text-faint">
-          Press Ctrl K to ask the terminal
-        </p>
-      </nav>
-    </div>
   </div>
 </header>
 

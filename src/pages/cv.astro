@@ -9,6 +9,12 @@ const generated = new Date().toLocaleDateString("en-GB", {
   year: "numeric",
 });
 
+const thesisProject = resume.research.find((project) => project.slug === "corn-leaf-disease");
+const otherProjects = [
+  ...resume.research.filter((project) => project.slug !== "corn-leaf-disease"),
+  ...resume.engineering,
+];
+
 const contactLinks = [
   { label: "Email", href: `mailto:${site.email}`, text: site.email },
   { label: "Phone", href: `tel:${site.phoneHref}`, text: site.phone },
@@ -99,8 +105,9 @@ const contactLinks = [
         </dl>
       </section>
 
-      <section class="cv-section mt-7">
-        <h3 class="cv-section-title">Education</h3>
+      <details class="cv-drop mt-7" open>
+        <summary class="cv-section-title">Education</summary>
+        <div class="cv-drop-content">
         {resume.education.map((item) => (
           <div class="cv-entry mt-3">
             <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
@@ -113,63 +120,73 @@ const contactLinks = [
             <p class="cv-detail">{item.detail}</p>
           </div>
         ))}
-      </section>
+        </div>
+      </details>
 
-      <section class="cv-section mt-7">
-        <h3 class="cv-section-title">Research project</h3>
-        {resume.research.map((project) => (
+      <details class="cv-drop mt-7" open>
+        <summary class="cv-section-title">Thesis</summary>
+        <div class="cv-drop-content">
+        {thesisProject && (
+          <div class="cv-entry mt-3">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
+                {thesisProject.title}
+              </h4>
+              <p class="cv-date">{thesisProject.period}</p>
+            </div>
+            <p class="cv-org">{thesisProject.category}</p>
+            <p class="cv-detail">{thesisProject.summary}</p>
+            <ul class="cv-bullets">
+              {resume.thesisHighlights.map((highlight) => (
+                <li>{highlight}</li>
+              ))}
+            </ul>
+            <p class="cv-app">
+              <a href={resume.thesisApp} target="_blank" rel="noopener noreferrer">
+                Deployed app: {resume.thesisAppTitle} ↗
+              </a>
+            </p>
+            <p class="cv-tags">{thesisProject.tags.join(" · ")}</p>
+          </div>
+        )}
+        </div>
+      </details>
+
+      <details class="cv-drop mt-7" open>
+        <summary class="cv-section-title">Projects</summary>
+        <div class="cv-drop-content">
+        {otherProjects.map((project) => (
           <div class="cv-entry mt-3">
             <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
               <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
                 {project.title}
               </h4>
-              <p class="cv-date">{project.period}</p>
+              <p class="cv-date">{project.period ?? "Earlier"}</p>
             </div>
             <p class="cv-org">{project.category}</p>
             <p class="cv-detail">{project.summary}</p>
-            {project.slug === "corn-leaf-disease" && (
-              <>
-                <ul class="cv-bullets">
-                  {resume.thesisHighlights.map((highlight) => (
-                    <li>{highlight}</li>
-                  ))}
-                </ul>
-                <p class="cv-app">
-                  <a href={resume.thesisApp} target="_blank" rel="noopener noreferrer">
-                    Deployed app: {resume.thesisAppTitle} ↗
-                  </a>
-                </p>
-              </>
+            <p class="cv-tags">{project.tags.join(" · ")}</p>
+            {project.href && (
+              <p class="cv-app">
+                <a href={project.href} target="_blank" rel="noopener noreferrer">
+                  {project.linkLabel ?? "Open"} ↗
+                </a>
+              </p>
             )}
-            <p class="cv-tags">{project.tags.join(" · ")}</p>
-          </div>
-        ))}
-      </section>
+          </div>        ))}
+        </div>
+      </details>
 
-      <section class="cv-section mt-7">
-        <h3 class="cv-section-title">Engineering projects</h3>
-        {resume.engineering.map((project) => (
-          <div class="cv-entry mt-3">
-            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
-                {project.title}
-              </h4>
-              <p class="cv-date">Earlier</p>
-            </div>
-            <p class="cv-detail">{project.summary}</p>
-            <p class="cv-tags">{project.tags.join(" · ")}</p>
-          </div>
-        ))}
-      </section>
-
-      <section class="cv-section mt-7">
-        <h3 class="cv-section-title">Publications</h3>
+      <details class="cv-drop mt-7" open>
+        <summary class="cv-section-title">Publications</summary>
+        <div class="cv-drop-content">
         <p class="mt-3 text-[12px] leading-relaxed text-[#4b5563]">
           {resume.publications.length === 0
             ? "None yet — no peer-reviewed papers have been published. Nothing is listed rather than listed aspirationally."
             : resume.publications.map((publication) => publication.title).join("; ")}
         </p>
-      </section>
+        </div>
+      </details>
 
       <section class="cv-section mt-7">
         <h3 class="cv-section-title">Links</h3>
@@ -270,6 +287,43 @@ const contactLinks = [
   .cv-app a {
     color: #0f766e;
     text-decoration: none;
+  }
+
+  .cv-drop {
+    border-bottom: 1px solid #dfe4ea;
+  }
+
+  .cv-drop summary {
+    list-style: none;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .cv-drop summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .cv-drop summary::after {
+    content: "+";
+    float: right;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    color: #6b7280;
+  }
+
+  .cv-drop[open] summary::after {
+    content: "-";
+  }
+
+  .cv-drop-content {
+    overflow: hidden;
+    max-height: 4000px;
+    opacity: 1;
+    transition: max-height 260ms ease, opacity 260ms ease;
+  }
+
+  .cv-drop:not([open]) .cv-drop-content {
+    max-height: 0;
+    opacity: 0;
   }
 
   .cv-skill-row {
