@@ -3,17 +3,14 @@ import MainLayout from "../layouts/MainLayout.astro";
 import { ArrowUpRight } from "@lucide/astro";
 import { site } from "../data/site";
 import { resume } from "../data/resume";
+import { thesis } from "../data/thesis";
 
 const generated = new Date().toLocaleDateString("en-GB", {
   month: "long",
   year: "numeric",
 });
 
-const thesisProject = resume.research.find((project) => project.slug === "corn-leaf-disease");
-const otherProjects = [
-  ...resume.research.filter((project) => project.slug !== "corn-leaf-disease"),
-  ...resume.engineering,
-];
+const otherProjects = resume.engineering;
 
 const contactLinks = [
   { label: "Email", href: `mailto:${site.email}`, text: site.email },
@@ -126,29 +123,27 @@ const contactLinks = [
       <details class="cv-drop mt-7" open>
         <summary class="cv-section-title">Thesis</summary>
         <div class="cv-drop-content">
-        {thesisProject && (
-          <div class="cv-entry mt-3">
-            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-              <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
-                {thesisProject.title}
-              </h4>
-              <p class="cv-date">{thesisProject.period}</p>
-            </div>
-            <p class="cv-org">{thesisProject.category}</p>
-            <p class="cv-detail">{thesisProject.summary}</p>
-            <ul class="cv-bullets">
-              {resume.thesisHighlights.map((highlight) => (
-                <li>{highlight}</li>
-              ))}
-            </ul>
-            <p class="cv-app">
-              <a href={resume.thesisApp} target="_blank" rel="noopener noreferrer">
-                Deployed app: {resume.thesisAppTitle} ↗
-              </a>
-            </p>
-            <p class="cv-tags">{thesisProject.tags.join(" · ")}</p>
+        <div class="cv-entry mt-3">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
+              {thesis.title}
+            </h4>
+            <p class="cv-date">{thesis.period}</p>
           </div>
-        )}
+          <p class="cv-org">{thesis.kind} · {thesis.institution}</p>
+          <p class="cv-detail">{thesis.summary}</p>
+          <ul class="cv-bullets">
+            {resume.thesisHighlights.map((highlight) => (
+              <li>{highlight}</li>
+            ))}
+          </ul>
+          <p class="cv-app">
+            <a href={resume.thesisApp} target="_blank" rel="noopener noreferrer">
+              Deployed app: {resume.thesisAppTitle} ↗
+            </a>
+          </p>
+          <p class="cv-tags">DenseNet121 · EfficientNet-B0 · Transfer learning</p>
+        </div>
         </div>
       </details>
 

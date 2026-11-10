@@ -1,6 +1,6 @@
 ---
-import MainLayout from "../../layouts/MainLayout.astro";
-import { thesis } from "../../data/thesis";
+import MainLayout from "../layouts/MainLayout.astro";
+import { thesis } from "../data/thesis";
 
 const meta = [
   { term: "Institution", detail: thesis.institution },
@@ -12,10 +12,10 @@ const meta = [
 <MainLayout title={thesis.title} description={thesis.summary.slice(0, 155)}>
   <section class="border-b border-line py-14">
     <a
-      href="/projects"
+      href="/research"
       class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint transition-colors hover:text-mint"
     >
-      ← Projects
+      ← Research
     </a>
     <p class="mt-8 font-mono text-[10px] uppercase tracking-[0.22em] text-mint">
       {thesis.kind} · Deep learning
@@ -135,12 +135,6 @@ const meta = [
       class="inline-flex items-center border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:border-mint hover:text-mint"
     >
       Research
-    </a>
-    <a
-      href="/projects"
-      class="inline-flex items-center px-2 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-faint transition-colors hover:text-mint"
-    >
-      All projects →
     </a>
   </section>
 </MainLayout>

@@ -15,16 +15,6 @@ const entries = [
     href: "/education",
     linkLabel: "Education",
   })),
-  ...resume.research.map((project) => ({
-    period: "2026",
-    tag: "Research",
-    title: project.title,
-    org: project.category,
-    body: project.summary,
-    tags: project.tags,
-    href: project.href,
-    linkLabel: "Case study",
-  })),
   ...resume.engineering.map((project) => ({
     period: "Earlier",
     tag: "Engineering",
@@ -42,7 +32,7 @@ const entries = [
   <SectionHeading
     eyebrow="Resume"
     title="The record, without the padding"
-    description="Education, research and engineering — the same resume as the printable CV, kept to what can be verified."
+    description="Education and software engineering — the same resume as the printable CV, kept to what can be verified."
     href="/cv"
     linkLabel="Printable CV"
   />

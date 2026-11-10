@@ -23,8 +23,7 @@ export const resume = {
       institution: "Daffodil International University",
       location: "Dhaka, Bangladesh",
       period: "Graduated June 2026",
-      detail:
-        "Thesis: Corn Leaf Disease Detection Using Deep Learning — a controlled comparison of DenseNet121 and EfficientNet-B0.",
+      detail: "Degree completed in June 2026.",
       href: "/education",
     },
     {
