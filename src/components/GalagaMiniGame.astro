@@ -1,0 +1,492 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+---
+
+<div class:list={["galaga", className]} data-galaga tabindex="0" aria-label="Galaga mini game">
+  <canvas data-canvas width="480" height="280"></canvas>
+  <div class="galaga-hud" aria-hidden="true">
+    <span>GALAGA MINI</span>
+    <span data-score>0</span>
+  </div>
+  <div class="galaga-footer" aria-hidden="true">
+    <span data-status>Arrow keys / drag · Space fires</span>
+    <button type="button" data-restart>Restart</button>
+  </div>
+</div>
+
+<style>
+  .galaga {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    outline: none;
+  }
+
+  .galaga canvas {
+    display: block;
+    width: 100%;
+    height: auto;
+    image-rendering: pixelated;
+    touch-action: none;
+  }
+
+  .galaga-hud,
+  .galaga-footer {
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #6b7280;
+    pointer-events: none;
+  }
+
+  .galaga-hud {
+    top: 0.75rem;
+  }
+
+  .galaga-footer {
+    bottom: 0.75rem;
+  }
+
+  .galaga-footer button {
+    pointer-events: auto;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(5, 8, 18, 0.7);
+    color: #94a3b8;
+    border-radius: 0.375rem;
+    padding: 0.125rem 0.375rem;
+    cursor: pointer;
+  }
+
+  .galaga-footer button:hover {
+    color: #5eead4;
+    border-color: rgba(94, 234, 212, 0.4);
+  }
+</style>
+
+<script>
+  const initGalaga = (root) => {
+    const canvas = root.querySelector("[data-canvas]");
+    const ctx = canvas.getContext("2d");
+    const scoreEl = root.querySelector("[data-score]");
+    const statusEl = root.querySelector("[data-status]");
+    const restartBtn = root.querySelector("[data-restart]");
+
+    const W = canvas.width;
+    const H = canvas.height;
+
+    const player = { x: W / 2, y: H - 24 };
+    let bullets = [];
+    let enemyBullets = [];
+    let enemies = [];
+    let explosions = [];
+    let stars = [];
+    let score = 0;
+    let lives = 3;
+    let level = 1;
+    let dir = 1;
+    let frame = 0;
+    let lastFire = 0;
+    let mode = "ready";
+    let visible = true;
+    let raf = null;
+
+    const keys = { left: false, right: false };
+
+    const makeEnemies = () => {
+      enemies = [];
+      const rows = 3;
+      const cols = 8;
+      for (let r = 0; r < rows; r += 1) {
+        for (let c = 0; c < cols; c += 1) {
+          enemies.push({
+            x: 60 + c * 48,
+            y: 44 + r * 30,
+            w: 18,
+            h: 12,
+            alive: true,
+            row: r,
+            col: c,
+          });
+        }
+      }
+    };
+
+    const reset = () => {
+      player.x = W / 2;
+      bullets = [];
+      enemyBullets = [];
+      explosions = [];
+      score = 0;
+      lives = 3;
+      level = 1;
+      dir = 1;
+      frame = 0;
+      lastFire = 0;
+      makeEnemies();
+      mode = "ready";
+      scoreEl.textContent = "0";
+      statusEl.textContent = "Arrow keys / drag · Space fires";
+    };
+
+    const start = () => {
+      if (mode === "gameover") reset();
+      mode = "playing";
+      statusEl.textContent = "Playing";
+    };
+
+    const fire = () => {
+      if (mode !== "playing") {
+        start();
+        return;
+      }
+      if (bullets.length < 4 && frame - lastFire > 12) {
+        bullets.push({ x: player.x, y: player.y - 10, vy: -7 });
+        lastFire = frame;
+      }
+    };
+
+    const isTyping = (target) =>
+      !!target &&
+      (target.tagName === "INPUT" ||
+        target.tagName === "TEXTAREA" ||
+        target.isContentEditable);
+
+    const update = () => {
+      frame += 1;
+
+      stars.forEach((star) => {
+        star.y += star.speed;
+        if (star.y > H) {
+          star.y = 0;
+          star.x = Math.random() * W;
+        }
+      });
+
+      if (mode !== "playing") return;
+
+      if (keys.left) player.x -= 4;
+      if (keys.right) player.x += 4;
+      player.x = Math.max(16, Math.min(W - 16, player.x));
+
+      bullets.forEach((bullet) => {
+        bullet.y += bullet.vy;
+      });
+      bullets = bullets.filter((bullet) => bullet.y > -10);
+
+      enemyBullets.forEach((bullet) => {
+        bullet.y += bullet.vy;
+      });
+
+      const alive = enemies.filter((enemy) => enemy.alive);
+
+      if (alive.length === 0) {
+        level += 1;
+        makeEnemies();
+        dir = 1;
+      }
+
+      let hitEdge = false;
+      for (const enemy of alive) {
+        if (enemy.x < 18 || enemy.x > W - 18) {
+          hitEdge = true;
+          break;
+        }
+      }
+
+      if (hitEdge) {
+        dir = -dir;
+        alive.forEach((enemy) => {
+          enemy.y += 10;
+        });
+      }
+
+      const speed = 0.8 + (level - 1) * 0.25;
+      alive.forEach((enemy) => {
+        enemy.x += speed * dir;
+      });
+
+      if (frame % 50 === 0 && alive.length > 0) {
+        const bottomByColumn = new Map();
+        for (const enemy of alive) {
+          const current = bottomByColumn.get(enemy.col);
+          if (!current || enemy.row > current.row) {
+            bottomByColumn.set(enemy.col, enemy);
+          }
+        }
+        const shooters = [...bottomByColumn.values()];
+        const shooter = shooters[Math.floor(Math.random() * shooters.length)];
+        enemyBullets.push({
+          x: shooter.x,
+          y: shooter.y + 8,
+          vy: 3.2 + level * 0.2,
+        });
+      }
+
+      for (const bullet of bullets) {
+        for (const enemy of enemies) {
+          if (!enemy.alive) continue;
+          if (
+            Math.abs(bullet.x - enemy.x) < enemy.w / 2 + 2 &&
+            Math.abs(bullet.y - enemy.y) < enemy.h / 2 + 2
+          ) {
+            enemy.alive = false;
+            bullet.y = -100;
+            score += 10 + enemy.row * 5;
+            explosions.push({ x: enemy.x, y: enemy.y, life: 18, color: "#5EEAD4" });
+          }
+        }
+      }
+      bullets = bullets.filter((bullet) => bullet.y > -10);
+
+      for (const bullet of enemyBullets) {
+        if (
+          Math.abs(bullet.x - player.x) < 12 &&
+          Math.abs(bullet.y - player.y) < 10
+        ) {
+          bullet.y = H + 100;
+          lives -= 1;
+          explosions.push({
+            x: player.x,
+            y: player.y,
+            life: 24,
+            color: "#f87171",
+          });
+          if (lives <= 0) {
+            mode = "gameover";
+            statusEl.textContent = "Game over";
+          }
+        }
+      }
+      enemyBullets = enemyBullets.filter((bullet) => bullet.y < H + 10);
+
+      if (alive.some((enemy) => enemy.y > H - 40)) {
+        mode = "gameover";
+        statusEl.textContent = "Game over";
+      }
+
+      scoreEl.textContent = String(score);
+    };
+
+    const draw = () => {
+      ctx.fillStyle = "#050812";
+      ctx.fillRect(0, 0, W, H);
+
+      stars.forEach((star) => {
+        ctx.globalAlpha = star.a;
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(star.x, star.y, star.s, star.s);
+      });
+      ctx.globalAlpha = 1;
+
+      enemies.forEach((enemy) => {
+        if (!enemy.alive) return;
+        const color =
+          enemy.row === 0
+            ? "#5EEAD4"
+            : enemy.row === 1
+              ? "#38BDF8"
+              : "#A78BFA";
+        ctx.fillStyle = color;
+        ctx.fillRect(enemy.x - 9, enemy.y - 6, 18, 12);
+        ctx.fillStyle = "#050812";
+        ctx.fillRect(enemy.x - 5, enemy.y - 2, 3, 3);
+        ctx.fillRect(enemy.x + 2, enemy.y - 2, 3, 3);
+      });
+
+      ctx.fillStyle = "#f87171";
+      enemyBullets.forEach((bullet) => {
+        ctx.fillRect(bullet.x - 1.5, bullet.y, 3, 8);
+      });
+
+      ctx.fillStyle = "#fde68a";
+      bullets.forEach((bullet) => {
+        ctx.fillRect(bullet.x - 1.5, bullet.y, 3, 8);
+      });
+
+      explosions.forEach((explosion) => {
+        ctx.globalAlpha = Math.max(0, explosion.life / 18);
+        ctx.strokeStyle = explosion.color;
+        ctx.beginPath();
+        ctx.arc(
+          explosion.x,
+          explosion.y,
+          (18 - explosion.life) * 1.5 + 2,
+          0,
+          Math.PI * 2
+        );
+        ctx.stroke();
+        ctx.globalAlpha = 1;
+        explosion.life -= 1;
+      });
+      explosions = explosions.filter((explosion) => explosion.life > 0);
+
+      if (mode !== "gameover" || lives > 0) {
+        ctx.fillStyle = "#5EEAD4";
+        ctx.beginPath();
+        ctx.moveTo(player.x, player.y - 10);
+        ctx.lineTo(player.x - 12, player.y + 8);
+        ctx.lineTo(player.x + 12, player.y + 8);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.fillStyle = "#050812";
+        ctx.fillRect(player.x - 2, player.y - 2, 4, 4);
+      }
+
+      ctx.fillStyle = "#6b7280";
+      ctx.font = "10px monospace";
+      ctx.textAlign = "right";
+      ctx.fillText("LIVES " + lives, W - 10, 16);
+      ctx.textAlign = "left";
+
+      if (mode === "ready") {
+        ctx.fillStyle = "rgba(5, 8, 18, 0.55)";
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = "#5EEAD4";
+        ctx.font = "bold 28px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText("GALAGA MINI", W / 2, H / 2 - 10);
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "12px monospace";
+        ctx.fillText("Press Space or tap to play", W / 2, H / 2 + 16);
+        ctx.textAlign = "left";
+      } else if (mode === "gameover") {
+        ctx.fillStyle = "rgba(5, 8, 18, 0.65)";
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = "#f87171";
+        ctx.font = "bold 28px monospace";
+        ctx.textAlign = "center";
+        ctx.fillText("GAME OVER", W / 2, H / 2 - 16);
+        ctx.fillStyle = "#94a3b8";
+        ctx.font = "12px monospace";
+        ctx.fillText("Score " + score, W / 2, H / 2 + 8);
+        ctx.fillText("Press Space or tap to restart", W / 2, H / 2 + 30);
+        ctx.textAlign = "left";
+      }
+    };
+
+    const loop = () => {
+      if (visible) {
+        update();
+        draw();
+      }
+      raf = requestAnimationFrame(loop);
+    };
+
+    stars = Array.from({ length: 60 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      s: Math.random() < 0.2 ? 2 : 1,
+      speed: 0.2 + Math.random() * 0.4,
+      a: 0.3 + Math.random() * 0.7,
+    }));
+
+    makeEnemies();
+    reset();
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        visible = entries[0]?.isIntersecting ?? true;
+      },
+      { threshold: 0.1 }
+    );
+    observer.observe(root);
+
+    const onKeyDown = (event) => {
+      if (isTyping(event.target)) return;
+      if (event.code === "ArrowLeft") {
+        keys.left = true;
+        event.preventDefault();
+      } else if (event.code === "ArrowRight") {
+        keys.right = true;
+        event.preventDefault();
+      } else if (event.code === "Space") {
+        event.preventDefault();
+        fire();
+      }
+    };
+
+    const onKeyUp = (event) => {
+      if (event.code === "ArrowLeft") keys.left = false;
+      if (event.code === "ArrowRight") keys.right = false;
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    window.addEventListener("keyup", onKeyUp);
+
+    let pointerDown = false;
+    let moved = false;
+    let startX = 0;
+    let startY = 0;
+    let downTime = 0;
+
+    canvas.addEventListener("pointerdown", (event) => {
+      event.preventDefault();
+      pointerDown = true;
+      moved = false;
+      startX = event.clientX;
+      startY = event.clientY;
+      downTime = Date.now();
+      root.focus({ preventScroll: true });
+      if (mode !== "playing") start();
+    });
+
+    canvas.addEventListener("pointermove", (event) => {
+      if (!pointerDown) return;
+      event.preventDefault();
+      const rect = canvas.getBoundingClientRect();
+      const x = (event.clientX - rect.left) * (W / rect.width);
+      if (
+        Math.abs(event.clientX - startX) > 4 ||
+        Math.abs(event.clientY - startY) > 4
+      ) {
+        moved = true;
+      }
+      player.x = Math.max(16, Math.min(W - 16, x));
+    });
+
+    canvas.addEventListener("pointerup", () => {
+      pointerDown = false;
+      const elapsed = Date.now() - downTime;
+      if (!moved && elapsed < 300 && mode === "playing") {
+        fire();
+      }
+    });
+
+    canvas.addEventListener("pointerleave", () => {
+      pointerDown = false;
+    });
+
+    restartBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      reset();
+      start();
+    });
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        if (raf) {
+          cancelAnimationFrame(raf);
+          raf = null;
+        }
+      } else if (!raf) {
+        raf = requestAnimationFrame(loop);
+      }
+    });
+
+    raf = requestAnimationFrame(loop);
+  };
+
+  document.querySelectorAll("[data-galaga]").forEach(initGalaga);
+</script>
