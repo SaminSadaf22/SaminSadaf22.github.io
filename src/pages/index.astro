@@ -121,11 +121,23 @@ const secondary = projects[1];
       <div
         class="relative overflow-hidden rounded-3xl border border-white/10 bg-[#080d17]/85 p-1.5 shadow-[0_40px_90px_-50px_rgba(0,0,0,1)] backdrop-blur"
       >
-        <div class="flex items-center gap-2 px-3 py-2">
-          <span class="h-2 w-2 rounded-full bg-[#ff5f57]/70" aria-hidden="true"></span>
-          <span class="h-2 w-2 rounded-full bg-[#febc2e]/70" aria-hidden="true"></span>
-          <span class="h-2 w-2 rounded-full bg-[#28c840]/70" aria-hidden="true"></span>
-          <span class="ml-auto font-mono text-[10px] tracking-[0.14em] text-faint">thesis.2026</span>
+        <div class="flex items-stretch border-b border-white/5">
+          <div class="flex min-w-0 items-center gap-2 px-3 py-2">
+            <span
+              class="grid h-4 w-4 shrink-0 place-items-center rounded-sm border border-mint/25 bg-mint/5 font-mono text-[8px] leading-none text-mint"
+              aria-hidden="true"
+            >
+              &gt;_
+            </span>
+            <span class="truncate font-mono text-[10px] tracking-[0.14em] text-faint">
+              thesis.2026 — review
+            </span>
+          </div>
+          <div class="ml-auto flex shrink-0 items-stretch" aria-hidden="true">
+            <span class="grid w-6 place-items-center border-l border-white/5 font-mono text-[9px] leading-none text-faint/50">─</span>
+            <span class="grid w-6 place-items-center border-l border-white/5 font-mono text-[9px] leading-none text-faint/50">□</span>
+            <span class="grid w-7 place-items-center border-l border-white/5 font-mono text-[10px] leading-none text-faint/50">✕</span>
+          </div>
         </div>
 
         <div class="rounded-2xl border border-white/5 bg-[#060a12] p-5 sm:p-6">
