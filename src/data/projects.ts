@@ -6,6 +6,7 @@ export type Project = {
   summary: string;
   tags: string[];
   href?: string;
+  linkLabel?: string;
 };
 
 export const projects: Project[] = [
@@ -18,6 +19,18 @@ export const projects: Project[] = [
       "A comparative study of DenseNet121 and EfficientNet-B0 for classifying corn leaf disease from images, developed as my thesis at Daffodil International University. Includes a deployed Gradio app on Hugging Face for disease detection and advisory.",
     tags: ["DenseNet121", "EfficientNet-B0", "Transfer learning", "Gradio", "Hugging Face"],
     href: "/projects/corn-leaf-disease",
+    linkLabel: "Read the study",
+  },
+  {
+    slug: "cognitive-ai",
+    title: "Cognitive AI: A Global-Workspace Hypothesis",
+    category: "AI Research",
+    period: "2026 · independent hypothesis",
+    summary:
+      "A small, inspectable cognitive loop that combines predictive processing, a two-channel global workspace, decaying memory, affect and action selection. Its “I feel” line is a generated self-report, not a claim of sentience.",
+    tags: ["Global workspace", "Predictive processing", "Affect", "TypeScript"],
+    href: "/projects/cognitive-ai",
+    linkLabel: "Open hypothesis",
   },
   {
     slug: "booking-system",
