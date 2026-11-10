@@ -68,7 +68,7 @@ SEGMENTS: dict[str, dict[str, Any]] = {
 }
 
 app = FastAPI(
-    title="Samin Sadaf portfolio admin",
+    title="Portfolio content admin",
     description="Local content API for the portfolio site.",
     version="1.0.0",
 )

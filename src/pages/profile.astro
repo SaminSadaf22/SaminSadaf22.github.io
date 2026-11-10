@@ -3,13 +3,14 @@ import MainLayout from "../layouts/MainLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { skillGroups } from "../data/profile";
 import { pageCopy } from "../data/pages";
+import { site } from "../data/site";
 
 const profilePage = pageCopy.profilePage;
 ---
 
 <MainLayout
   title="Technical Profile"
-  description="Technical profile of Samin Sadaf — languages, research methods and engineering environment."
+  description={`Technical profile of ${site.name} — languages, research methods and engineering environment.`}
 >
   <PageHero
     eyebrow={profilePage.eyebrow}

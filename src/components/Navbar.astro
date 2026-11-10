@@ -1,5 +1,5 @@
 ---
-import { nav, site } from "../data/site";
+import { initials, nav, site } from "../data/site";
 ---
 
 <header data-site-chrome class="sticky top-0 z-50 px-3 pt-3 sm:px-5">
@@ -11,7 +11,7 @@ import { nav, site } from "../data/site";
         <span
           class="grid h-9 w-9 place-items-center rounded-xl border border-mint/25 bg-linear-to-br from-mint/20 to-azure/5 font-display text-[11px] font-semibold tracking-[0.12em] text-mint transition-transform duration-300 group-hover:scale-105"
         >
-          SS
+          {initials}
         </span>
         <span class="hidden flex-col leading-none sm:flex">
           <span class="font-display text-[13px] font-medium tracking-tight text-ink">{site.name}</span>

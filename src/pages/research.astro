@@ -4,13 +4,14 @@ import PageHero from "../components/PageHero.astro";
 import { researchInterests } from "../data/profile";
 import { pageCopy } from "../data/pages";
 import { thesis } from "../data/thesis";
+import { site } from "../data/site";
 
 const researchPage = pageCopy.researchPage;
 ---
 
 <MainLayout
   title="Research"
-  description="Research by Samin Sadaf on applied deep learning and computer vision for agriculture."
+  description={`Research by ${site.name} on applied deep learning and computer vision for agriculture.`}
 >
   <PageHero
     eyebrow={researchPage.eyebrow}

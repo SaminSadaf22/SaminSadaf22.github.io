@@ -3,13 +3,14 @@ import MainLayout from "../layouts/MainLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { projects } from "../data/projects";
 import { pageCopy } from "../data/pages";
+import { site } from "../data/site";
 
 const projectsPage = pageCopy.projectsPage;
 ---
 
 <MainLayout
   title="Projects"
-  description="Software engineering projects by Samin Sadaf."
+  description={`Software engineering projects by ${site.name}.`}
 >
   <PageHero
     eyebrow={projectsPage.eyebrow}

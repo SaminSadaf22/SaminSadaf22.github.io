@@ -4,7 +4,7 @@ import AetherDrift from "../components/AetherDrift.astro";
 import SectionHeading from "../components/SectionHeading.astro";
 import ResumeSection from "../components/ResumeSection.astro";
 import Terminal from "../components/Terminal.astro";
-import { site } from "../data/site";
+import { firstName, lastName, site } from "../data/site";
 import { skillGroups, researchInterests } from "../data/profile";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
@@ -45,7 +45,7 @@ const project = projects[0];
       </div>
 
       <h1 class="mt-7 whitespace-nowrap font-display text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[5.1rem]">
-        Samin <span class="text-gradient">Sadaf</span>
+        {firstName}{lastName && <span class="text-gradient"> {lastName}</span>}
       </h1>
 
       <p class="mt-6 font-serif text-2xl italic leading-snug text-muted sm:text-[1.75rem]">

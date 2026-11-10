@@ -1,4 +1,4 @@
-# Samin Sadaf — portfolio
+# Samin — portfolio
 
 Personal site built with Astro 7 and Tailwind CSS 4. Live at
 <https://saminsadaf22.github.io>.

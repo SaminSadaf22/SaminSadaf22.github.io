@@ -6,6 +6,7 @@ interface Props {
 const { compact = false } = Astro.props;
 
 import { insights } from "../data/cli";
+import { site } from "../data/site";
 import SectionHeading from "./SectionHeading.astro";
 
 const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
@@ -39,6 +40,7 @@ const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
       compact ? "mt-0" : "mt-8",
     ]}
     data-terminal
+    data-site-name={site.name}
   >
     <div class="flex items-stretch border-b border-white/10 bg-white/[0.025]">
       <div class="flex min-w-0 items-center gap-2.5 px-4 py-2.5">
@@ -140,6 +142,7 @@ const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
   const input = document.getElementById("cli-input") as HTMLInputElement | null;
   const index = document.querySelector<HTMLScriptElement>("[data-cli-index]");
   const shell = document.querySelector<HTMLElement>("[data-terminal]");
+  const siteName = shell?.dataset.siteName?.trim() || "the author";
 
   if (output && form && input && index) {
     type Entry = {
@@ -317,11 +320,11 @@ const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
       } else if (lower === "ls" || lower === "topics") {
         listTopics();
       } else if (lower === "whoami") {
-        line("samin — AI researcher & builder · Dhaka, Bangladesh", "ink");
+        line(`${siteName.toLowerCase()} — AI researcher & builder · Dhaka, Bangladesh`, "ink");
         line("BSc in Software Engineering, Daffodil International University (2026).", "muted");
       } else if (lower === "sudo" || head === "sudo") {
         line("Nice try. This shell is read-only — and you are not in the sudoers file.", "muted");
-        line("Samin is the only admin here. Try `help` instead.", "faint");
+        line(`${siteName} is the only admin here. Try \`help\` instead.`, "faint");
       } else if (lower === "coffee" || lower === "brew coffee") {
         line("Coffee is not in the dependency list, but every build step assumes it.", "muted");
       } else if (lower.startsWith("rm -rf")) {
@@ -344,8 +347,8 @@ const suggestions = ["thesis", "projects", "skills", "availability", "sudo"];
       scrollOutput();
     };
 
-    line("Samin Terminal [Version 1.0] — read-only portfolio shell", "mint");
-    line("(c) Samin Sadaf. A keyword index over the facts on this site. Type `help` to begin.", "faint");
+    line(`${siteName} Terminal [Version 1.0] — read-only portfolio shell`, "mint");
+    line(`(c) ${siteName}. A keyword index over the facts on this site. Type \`help\` to begin.`, "faint");
 
     form.addEventListener("submit", (event) => {
       event.preventDefault();

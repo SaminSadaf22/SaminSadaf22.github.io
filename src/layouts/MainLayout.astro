@@ -2,7 +2,8 @@
 import "../styles/global.css";
 import { ArrowUp, ArrowUpRight } from "@lucide/astro";
 import Navbar from "../components/Navbar.astro";
-import { footerNav, site } from "../data/site";
+import { footerNav, initials, site } from "../data/site";
+import { resume } from "../data/resume";
 
 interface Props {
   title?: string;
@@ -13,17 +14,22 @@ const isHome = Astro.url.pathname === "/";
 const { title, description = site.description } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : site.title;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
-const seoTitle = isHome
-  ? "MD. Samin Sadaf | Software Engineer & AI Developer"
-  : pageTitle;
-const seoDescription = isHome
-  ? "Official portfolio of MD. Samin Sadaf — Software Engineer & AI Developer based in Dhaka, Bangladesh specializing in Python, Django, Deep Learning, and Web Architecture."
-  : description;
-const seoCanonical = isHome ? "https://saminsadaf.me/" : canonical;
-const seoOgDescription = isHome
-  ? "Portfolio of MD. Samin Sadaf — Software Engineer & AI Developer focusing on Python, Django, Deep Learning, and Web Architecture."
-  : description;
+const seoTitle = isHome ? site.title : pageTitle;
+const seoDescription = isHome ? site.description : description;
+const seoCanonical = isHome ? new URL("/", site.url).href : canonical;
+const seoOgDescription = isHome ? site.description : description;
+const seoKeywords = [
+  site.name,
+  site.role,
+  "Portfolio",
+  site.location,
+  "Python",
+  "Deep Learning",
+]
+  .filter(Boolean)
+  .join(", ");
 const ogImage = new URL("/og.png", site.url).href;
+const education = resume.education[0];
 const footerPages = footerNav.slice(0, 5);
 const footerMore = footerNav.slice(5);
 ---
@@ -39,37 +45,33 @@ const footerMore = footerNav.slice(5);
 
     {isHome && (
       <>
-        <meta name="keywords" content="MD. Samin Sadaf, Samin Sadaf, Software Engineer, AI Developer, Python Developer, Portfolio, Dhaka, Bangladesh" />
-        <meta name="author" content="MD. Samin Sadaf" />
-        <meta property="og:url" content="https://saminsadaf.me/" />
-        <meta property="og:title" content="MD. Samin Sadaf | Software Engineer & AI Developer" />
-        <meta property="og:description" content="Portfolio of MD. Samin Sadaf — Software Engineer & AI Developer focusing on Python, Django, Deep Learning, and Web Architecture." />
-        <meta name="twitter:url" content="https://saminsadaf.me/" />
-        <meta name="twitter:title" content="MD. Samin Sadaf | Software Engineer & AI Developer" />
-        <meta property="twitter:description" content="Portfolio of MD. Samin Sadaf — Software Engineer & AI Developer focusing on Python, Django, Deep Learning, and Web Architecture." />
+        <meta name="keywords" content={seoKeywords} />
+        <meta name="author" content={site.name} />
+        <meta property="og:url" content={seoCanonical} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoOgDescription} />
+        <meta name="twitter:url" content={seoCanonical} />
+        <meta name="twitter:title" content={seoTitle} />
+        <meta property="twitter:description" content={seoOgDescription} />
         <script
           type="application/ld+json"
           set:html={JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Person",
-            name: "MD. Samin Sadaf",
-            alternateName: ["Samin Sadaf", "SaminSadaf22"],
-            url: "https://saminsadaf.me",
-            jobTitle: "Software Engineer",
-            alumniOf: {
-              "@type": "EducationalOrganization",
-              name: "Daffodil International University",
-              sameAs: "https://daffodilvarsity.edu.bd/",
-            },
-            address: {
-              "@type": "PostalAddress",
-              addressLocality: "Dhaka",
-              addressCountry: "Bangladesh",
-            },
-            sameAs: [
-              "https://github.com/SaminSadaf22",
-              "https://www.linkedin.com/in/Samin_Sadaf",
-            ],
+            name: site.name,
+            description: site.description,
+            url: site.url,
+            jobTitle: site.role,
+            ...(education
+              ? {
+                  alumniOf: {
+                    "@type": "EducationalOrganization",
+                    name: education.institution,
+                  },
+                }
+              : {}),
+            address: site.location,
+            sameAs: site.socials.map((social) => social.href),
           })}
         />
       </>
@@ -143,7 +145,7 @@ const footerMore = footerNav.slice(5);
               <span
                 class="grid h-9 w-9 place-items-center rounded-xl border border-mint/25 bg-linear-to-br from-mint/20 to-azure/5 font-display text-[11px] font-semibold tracking-[0.12em] text-mint"
               >
-                SS
+                {initials}
               </span>
               <span class="font-display text-sm font-medium tracking-tight text-ink">{site.name}</span>
             </a>
@@ -206,7 +208,7 @@ const footerMore = footerNav.slice(5);
           style="-webkit-text-stroke: 1px rgba(255,255,255,0.09)"
           aria-hidden="true"
         >
-          SAMIN SADAF
+          {site.name.toUpperCase()}
         </p>
 
         <div class="flex flex-col gap-3 border-t border-white/10 py-6 sm:flex-row sm:items-center sm:justify-between">
