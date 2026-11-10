@@ -9,6 +9,7 @@ import { skillGroups, researchInterests } from "../data/profile";
 import { projects } from "../data/projects";
 import { publications } from "../data/publications";
 import { thesis } from "../data/thesis";
+import { resume } from "../data/resume";
 import { ArrowRight, ArrowUpRight, Copy, MapPin } from "@lucide/astro";
 
 const principles = [
@@ -229,6 +230,30 @@ const secondary = projects[1];
           </h3>
           <p class="mt-2.5 text-[12px] leading-relaxed text-muted">{principle.body}</p>
         </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Education -->
+  <section id="education" class="reveal scroll-mt-28 border-t border-white/10 py-16 sm:py-20">
+    <SectionHeading
+      eyebrow="Education"
+      title="The academic record"
+      description="Schooling in Bogura and Gaibandha, then a BSc in Software Engineering at Daffodil International University."
+      href="/education"
+      linkLabel="Full education"
+    />
+
+    <div class="mt-9 grid gap-4 md:grid-cols-3">
+      {resume.education.map((item) => (
+        <article class="card-surface rounded-2xl p-6">
+          <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-mint">{item.period}</p>
+          <h3 class="mt-3 font-display text-lg font-medium leading-snug tracking-tight text-ink">
+            {item.degree}
+          </h3>
+          <p class="mt-2 text-[13px] text-muted">{item.institution} · {item.location}</p>
+          <p class="mt-3 text-[12px] leading-relaxed text-muted">{item.detail}</p>
+        </article>
       ))}
     </div>
   </section>

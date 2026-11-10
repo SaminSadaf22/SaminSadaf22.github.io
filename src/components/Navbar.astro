@@ -5,9 +5,9 @@ import { nav, site } from "../data/site";
 <header data-site-chrome class="sticky top-0 z-50 px-3 pt-3 sm:px-5">
   <div class="mx-auto w-full max-w-6xl">
     <div
-      class="flex h-14 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#070b14]/80 py-2 pl-3 pr-2 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.95)] backdrop-blur-xl sm:pl-4"
+      class="grid h-14 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 rounded-2xl border border-white/10 bg-[#070b14]/80 py-2 px-3 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.95)] backdrop-blur-xl sm:px-4"
     >
-      <a href="/#top" class="group flex shrink-0 items-center gap-2.5" aria-label={`${site.name} — home`}>
+      <a href="/#top" class="group flex min-w-0 shrink-0 items-center gap-2.5 justify-self-start" aria-label={`${site.name} — home`}>
         <span
           class="grid h-9 w-9 place-items-center rounded-xl border border-mint/25 bg-linear-to-br from-mint/20 to-azure/5 font-display text-[11px] font-semibold tracking-[0.12em] text-mint transition-transform duration-300 group-hover:scale-105"
         >
@@ -19,8 +19,8 @@ import { nav, site } from "../data/site";
         </span>
       </a>
 
-      <nav aria-label="Primary" class="min-w-0 flex-1 overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
-        <ul class="flex items-center gap-0.5 whitespace-nowrap">
+      <nav aria-label="Primary" class="min-w-0 max-w-[calc(100vw-8rem)] justify-self-center overflow-x-auto" style="scrollbar-width: none; -ms-overflow-style: none;">
+        <ul class="mx-auto flex items-center gap-0.5 whitespace-nowrap">
           {nav.map((item) => (
             <li>
               <a
@@ -35,7 +35,7 @@ import { nav, site } from "../data/site";
         </ul>
       </nav>
 
-      <div class="flex shrink-0 items-center gap-2">
+      <div class="flex shrink-0 items-center gap-2 justify-self-end">
         <a
           href="/#contact"
           class="hidden items-center gap-1.5 rounded-full bg-linear-to-r from-mint to-azure px-4 py-2 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#04100f] transition-opacity hover:opacity-90 sm:inline-flex"
@@ -73,7 +73,7 @@ import { nav, site } from "../data/site";
 
   // On the single-page home, highlight the section currently being read.
   const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"));
-  const sectionIds = ["top", "about", "research", "projects", "resume", "terminal", "contact"];
+  const sectionIds = ["top", "about", "research", "projects", "education", "resume", "terminal", "contact"];
 
   const setCurrent = (href: string) => {
     links.forEach((link) => {
