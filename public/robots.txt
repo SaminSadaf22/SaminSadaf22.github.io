@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://saminsadaf.me/sitemap-index.xml
+Sitemap: https://saminsadaf.me/sitemap.xml

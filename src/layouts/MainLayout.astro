@@ -9,9 +9,20 @@ interface Props {
   description?: string;
 }
 
+const isHome = Astro.url.pathname === "/";
 const { title, description = site.description } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : site.title;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const seoTitle = isHome
+  ? "MD. Samin Sadaf | Software Engineer & AI Developer"
+  : pageTitle;
+const seoDescription = isHome
+  ? "Official portfolio of MD. Samin Sadaf — Software Engineer & AI Developer based in Dhaka, Bangladesh specializing in Python, Django, Deep Learning, and Web Architecture."
+  : description;
+const seoCanonical = isHome ? "https://saminsadaf.me/" : canonical;
+const seoOgDescription = isHome
+  ? "Portfolio of MD. Samin Sadaf — Software Engineer & AI Developer focusing on Python, Django, Deep Learning, and Web Architecture."
+  : description;
 const ogImage = new URL("/og.png", site.url).href;
 const footerPages = footerNav.slice(0, 5);
 const footerMore = footerNav.slice(5);
@@ -22,9 +33,47 @@ const footerMore = footerNav.slice(5);
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{pageTitle}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href={canonical} />
+    <title>{seoTitle}</title>
+    <meta name="description" content={seoDescription} />
+    <link rel="canonical" href={seoCanonical} />
+
+    {isHome && (
+      <>
+        <meta name="keywords" content="MD. Samin Sadaf, Samin Sadaf, Software Engineer, AI Developer, Python Developer, Portfolio, Dhaka, Bangladesh" />
+        <meta name="author" content="MD. Samin Sadaf" />
+        <meta property="og:url" content="https://saminsadaf.me/" />
+        <meta property="og:title" content="MD. Samin Sadaf | Software Engineer & AI Developer" />
+        <meta property="og:description" content="Portfolio of MD. Samin Sadaf — Software Engineer & AI Developer focusing on Python, Django, Deep Learning, and Web Architecture." />
+        <meta name="twitter:url" content="https://saminsadaf.me/" />
+        <meta name="twitter:title" content="MD. Samin Sadaf | Software Engineer & AI Developer" />
+        <meta property="twitter:description" content="Portfolio of MD. Samin Sadaf — Software Engineer & AI Developer focusing on Python, Django, Deep Learning, and Web Architecture." />
+        <script
+          type="application/ld+json"
+          set:html={JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Person",
+            name: "MD. Samin Sadaf",
+            alternateName: ["Samin Sadaf", "SaminSadaf22"],
+            url: "https://saminsadaf.me",
+            jobTitle: "Software Engineer",
+            alumniOf: {
+              "@type": "EducationalOrganization",
+              name: "Daffodil International University",
+              sameAs: "https://daffodilvarsity.edu.bd/",
+            },
+            address: {
+              "@type": "PostalAddress",
+              addressLocality: "Dhaka",
+              addressCountry: "Bangladesh",
+            },
+            sameAs: [
+              "https://github.com/SaminSadaf22",
+              "https://www.linkedin.com/in/Samin_Sadaf",
+            ],
+          })}
+        />
+      </>
+    )}
     <meta name="theme-color" content="#060810" />
     <meta name="generator" content={Astro.generator} />
 
@@ -33,9 +82,9 @@ const footerMore = footerNav.slice(5);
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />
-    <meta property="og:title" content={pageTitle} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    <meta property="og:title" content={seoTitle} />
+    <meta property="og:description" content={seoOgDescription} />
+    <meta property="og:url" content={seoCanonical} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
