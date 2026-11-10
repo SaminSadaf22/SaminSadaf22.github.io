@@ -178,7 +178,7 @@ const { class: className } = Astro.props;
       modeEl.textContent = nextMode === "attract" ? "ATTRACT" : "CONTROL";
       statusEl.textContent =
         nextMode === "attract"
-          ? "Auto-pilot engaged · Click or Space to take control"
+          ? "Auto-pilot engaged"
           : "You have control · Arrows/W/S move · Space boosts";
       scoreEl.textContent = "0";
       shieldEl.textContent = " shields " + shield;
@@ -445,12 +445,6 @@ const { class: className } = Astro.props;
 
       drawShip();
 
-      ctx.fillStyle = "#6b7280";
-      ctx.font = "10px monospace";
-      ctx.textAlign = "left";
-      ctx.fillText("SCORE " + score, 10, 16);
-      ctx.textAlign = "right";
-      ctx.fillText("SHIELD " + shield, W - 10, 16);
       ctx.textAlign = "left";
 
       if (promptEl) promptEl.style.display = mode === "attract" ? "block" : "none";
