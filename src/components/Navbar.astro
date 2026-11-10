@@ -1,15 +1,13 @@
 ---
 import { nav, site } from "../data/site";
-
-const path = Astro.url.pathname.replace(/\/+$/, "") || "/";
-const isActive = (href: string) =>
-  href === "/" ? path === "/" : path === href || path.startsWith(`${href}/`);
 ---
 
-<header class="sticky top-0 z-50 px-3 pt-3 sm:px-5">
+<header data-site-chrome class="sticky top-0 z-50 px-3 pt-3 sm:px-5">
   <div class="mx-auto w-full max-w-6xl">
-    <div class="flex h-14 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#070b14]/80 py-2 pl-3 pr-2 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.95)] backdrop-blur-xl sm:pl-4">
-      <a href="/" class="group flex shrink-0 items-center gap-2.5" aria-label={`${site.name} — home`}>
+    <div
+      class="flex h-14 items-center justify-between gap-3 rounded-2xl border border-white/10 bg-[#070b14]/80 py-2 pl-3 pr-2 shadow-[0_18px_50px_-24px_rgba(0,0,0,0.95)] backdrop-blur-xl sm:pl-4"
+    >
+      <a href="/#top" class="group flex shrink-0 items-center gap-2.5" aria-label={`${site.name} — home`}>
         <span
           class="grid h-9 w-9 place-items-center rounded-xl border border-mint/25 bg-linear-to-br from-mint/20 to-azure/5 font-display text-[11px] font-semibold tracking-[0.12em] text-mint transition-transform duration-300 group-hover:scale-105"
         >
@@ -22,18 +20,13 @@ const isActive = (href: string) =>
       </a>
 
       <nav aria-label="Primary" class="hidden xl:block">
-        <ul class="flex items-center gap-1">
+        <ul class="flex items-center gap-0.5">
           {nav.map((item) => (
             <li>
               <a
                 href={item.href}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                class:list={[
-                  "inline-flex rounded-full px-3.5 py-2 text-[12px] transition-colors duration-200",
-                  isActive(item.href)
-                    ? "bg-white/10 text-ink"
-                    : "text-muted hover:bg-white/5 hover:text-ink",
-                ]}
+                data-nav-link={item.href}
+                class="nav-link inline-flex rounded-full px-3 py-2 text-[12px] text-muted transition-colors duration-200 hover:bg-white/5 hover:text-ink"
               >
                 {item.label}
               </a>
@@ -44,7 +37,7 @@ const isActive = (href: string) =>
 
       <div class="flex shrink-0 items-center gap-2">
         <a
-          href="/contact"
+          href="/#contact"
           class="hidden items-center gap-1.5 rounded-full bg-linear-to-r from-mint to-azure px-4 py-2 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#04100f] transition-opacity hover:opacity-90 sm:inline-flex"
         >
           Let's talk
@@ -66,33 +59,35 @@ const isActive = (href: string) =>
       </div>
     </div>
 
-    <div id="mobile-nav" data-nav-panel class="mt-2 hidden overflow-hidden rounded-2xl border border-white/10 bg-[#070b14]/95 backdrop-blur-xl xl:hidden">
+    <div
+      id="mobile-nav"
+      data-nav-panel
+      class="mt-2 hidden max-h-[calc(100dvh-5.5rem)] overflow-y-auto rounded-2xl border border-white/10 bg-[#070b14]/95 backdrop-blur-xl xl:hidden"
+    >
       <nav aria-label="Mobile" class="p-2">
         <ul class="grid gap-0.5">
           {nav.map((item) => (
             <li>
               <a
                 href={item.href}
-                aria-current={isActive(item.href) ? "page" : undefined}
-                class:list={[
-                  "flex items-center justify-between rounded-xl px-4 py-3 text-sm transition-colors",
-                  isActive(item.href)
-                    ? "bg-white/5 text-mint"
-                    : "text-muted hover:bg-white/5 hover:text-ink",
-                ]}
+                data-nav-link={item.href}
+                class="nav-link-mobile flex items-center justify-between rounded-xl px-4 py-3 text-sm text-muted transition-colors hover:bg-white/5 hover:text-ink"
               >
                 {item.label}
-                {isActive(item.href) && <span class="h-1.5 w-1.5 rounded-full bg-mint" aria-hidden="true" />}
+                <span class="nav-dot h-1.5 w-1.5 rounded-full bg-mint" aria-hidden="true"></span>
               </a>
             </li>
           ))}
         </ul>
         <a
-          href="/contact"
+          href="/#contact"
           class="mt-2 flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-mint to-azure px-4 py-3 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-[#04100f]"
         >
           Let's talk ↗
         </a>
+        <p class="px-4 pb-1 pt-3 font-mono text-[9px] uppercase tracking-[0.14em] text-faint">
+          Press Ctrl K to ask the terminal
+        </p>
       </nav>
     </div>
   </div>
@@ -118,4 +113,71 @@ const isActive = (href: string) =>
       if (event.key === "Escape") setOpen(false);
     });
   }
+
+  // On the single-page home, highlight the section currently being read.
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-nav-link]"));
+  const sectionIds = ["top", "about", "research", "projects", "resume", "terminal", "contact"];
+
+  const setCurrent = (href: string) => {
+    links.forEach((link) => {
+      const current = link.dataset.navLink === href;
+      link.classList.toggle("is-current", current);
+      if (current) link.setAttribute("aria-current", "location");
+      else link.removeAttribute("aria-current");
+    });
+  };
+
+  const path = window.location.pathname.replace(/\/+$/, "") || "/";
+  if (path === "/") {
+    let ticking = false;
+
+    const updateCurrent = () => {
+      const marker = window.scrollY + Math.min(window.innerHeight * 0.35, 280);
+      let current = "top";
+
+      for (const id of sectionIds) {
+        const element = document.getElementById(id);
+        if (!element) continue;
+        if (element.getBoundingClientRect().top + window.scrollY <= marker) current = id;
+      }
+
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8) {
+        current = "contact";
+      }
+
+      setCurrent(`/#${current}`);
+      ticking = false;
+    };
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (ticking) return;
+        ticking = true;
+        window.requestAnimationFrame(updateCurrent);
+      },
+      { passive: true },
+    );
+    window.addEventListener("load", updateCurrent);
+    updateCurrent();
+  }
+
+  // Ctrl/Cmd+K jumps to the terminal, wherever you are.
+  document.addEventListener("keydown", (event) => {
+    if (!(event.metaKey || event.ctrlKey) || event.key.toLowerCase() !== "k") return;
+    event.preventDefault();
+
+    const input = document.getElementById("cli-input") as HTMLInputElement | null;
+    if (!input) {
+      window.location.assign("/#terminal");
+      return;
+    }
+
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById("terminal")?.scrollIntoView({
+      behavior: reduced ? "auto" : "smooth",
+      block: "center",
+    });
+    window.setTimeout(() => input.focus({ preventScroll: true }), reduced ? 0 : 400);
+  });
 </script>

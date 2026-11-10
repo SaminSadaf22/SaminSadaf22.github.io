@@ -2,23 +2,26 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import NeuralVisual from "../components/NeuralVisual.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import ResumeSection from "../components/ResumeSection.astro";
+import Terminal from "../components/Terminal.astro";
 import { site } from "../data/site";
-import { skillGroups } from "../data/profile";
+import { skillGroups, researchInterests } from "../data/profile";
 import { projects } from "../data/projects";
+import { publications } from "../data/publications";
 import { ArrowRight, ArrowUpRight, Copy, MapPin } from "@lucide/astro";
 
-const focus = [
+const principles = [
   {
-    title: "Computer vision for agriculture",
-    body: "Detecting plant disease from leaf imagery, where class imbalance and field conditions make clean benchmarks hard to trust.",
+    title: "Report what the model actually did",
+    body: "A number is only useful if someone can re-run it. Datasets, splits and seeds get documented alongside the result, not after it.",
   },
   {
-    title: "Transfer learning under constraint",
-    body: "What holds up when compute and labelled data are both scarce — pretrained backbones, augmentation, and honest validation splits.",
+    title: "Prefer the boring baseline",
+    body: "New architectures are easy to justify after the fact. I try to establish what a simpler model achieves first, then argue for complexity with evidence.",
   },
   {
-    title: "Reproducible evaluation",
-    body: "Documenting datasets, seeds and splits so a reported result can actually be re-run by someone else.",
+    title: "Build the thing, not just the notebook",
+    body: "A trained model that nobody can run is a claim, not a system. I care about the path from experiment to something usable.",
   },
 ];
 
@@ -29,37 +32,16 @@ const marqueeItems = [
   "Deep learning",
 ];
 
-const journey = [
-  {
-    period: "2026",
-    tag: "Education",
-    title: "BSc in Software Engineering",
-    body: "Graduated from Daffodil International University, Dhaka.",
-    href: "/education",
-  },
-  {
-    period: "2026",
-    tag: "Research",
-    title: "Undergraduate thesis",
-    body: "A controlled DenseNet121 vs EfficientNet-B0 comparison for corn leaf disease detection.",
-    href: "/projects/corn-leaf-disease",
-  },
-  {
-    period: "Now",
-    tag: "Next",
-    title: "Open to collaboration",
-    body: "Looking for research work in applied computer vision and evaluation that can be reproduced.",
-    href: "/contact",
-  },
-];
-
 const featured = projects[0];
 const secondary = projects[1];
 ---
 
 <MainLayout>
   <!-- Hero -->
-  <section class="relative grid items-center gap-14 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.06fr_0.94fr] lg:gap-12 lg:pt-24">
+  <section
+    id="top"
+    class="relative grid scroll-mt-28 items-center gap-14 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.06fr_0.94fr] lg:gap-12 lg:pt-24"
+  >
     <div class="reveal">
       <div
         class="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 backdrop-blur"
@@ -90,17 +72,35 @@ const secondary = projects[1];
       </p>
 
       <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a href="/research" class="btn btn-primary">
+        <a href="#research" class="btn btn-primary">
           Explore my research
-          <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
-        </a>
-        <a href="/projects" class="btn btn-ghost">
-          View projects
           <ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
+        </a>
+        <a href="#projects" class="btn btn-ghost">
+          View projects
+          <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
         </a>
       </div>
 
-      <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+      <div class="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2">
+        <a
+          href="#terminal"
+          data-open-terminal
+          class="group inline-flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.16em] text-faint transition-colors hover:text-mint"
+        >
+          <span
+            class="grid h-6 w-6 place-items-center rounded-md border border-line font-mono text-[10px] text-mint transition-colors group-hover:border-mint/40"
+          >
+            &gt;_
+          </span>
+          Ask my terminal
+          <kbd class="rounded border border-line px-1.5 py-0.5 font-mono text-[9px] tracking-[0.1em] text-faint">
+            Ctrl K
+          </kbd>
+        </a>
+      </div>
+
+      <div class="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
         <span class="inline-flex items-center gap-1.5">
           <MapPin size={12} strokeWidth={1.75} aria-hidden="true" />
           {site.location}
@@ -118,7 +118,9 @@ const secondary = projects[1];
       >
       </div>
 
-      <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-[#080d17]/85 p-1.5 shadow-[0_40px_90px_-50px_rgba(0,0,0,1)] backdrop-blur">
+      <div
+        class="relative overflow-hidden rounded-3xl border border-white/10 bg-[#080d17]/85 p-1.5 shadow-[0_40px_90px_-50px_rgba(0,0,0,1)] backdrop-blur"
+      >
         <div class="flex items-center gap-2 px-3 py-2">
           <span class="h-2 w-2 rounded-full bg-[#ff5f57]/70" aria-hidden="true"></span>
           <span class="h-2 w-2 rounded-full bg-[#febc2e]/70" aria-hidden="true"></span>
@@ -173,36 +175,197 @@ const secondary = projects[1];
     </div>
   </div>
 
-  <!-- Focus -->
-  <section class="reveal py-16 sm:py-20">
+  <!-- About -->
+  <section id="about" class="reveal scroll-mt-28 border-t border-white/10 py-16 sm:py-20">
     <SectionHeading
-      eyebrow="What I do"
-      title="Research with the numbers left intact"
-      description="Three threads run through my work: the problem, the method, and whether the result can survive being re-run."
+      eyebrow="About"
+      title="Research first, engineering close behind"
+      description="The short version of why the work looks like this — and what I would rather not pretend."
     />
 
-    <div class="mt-9 grid gap-4 md:grid-cols-3">
-      {focus.map((item, index) => (
-        <div class="card-surface group relative overflow-hidden rounded-2xl p-6 sm:p-7">
-          <div
-            class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-mint/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-            aria-hidden="true"
-          >
+    <div class="mt-9 grid gap-8 lg:grid-cols-[1.4fr_0.6fr] lg:gap-12">
+      <div class="space-y-4 text-[14px] leading-relaxed text-muted sm:text-[15px]">
+        <p>
+          I'm an AI researcher and builder based in {site.location}. My work sits
+          at the intersection of applied deep learning and the practical question
+          of whether a model does anything useful outside a notebook.
+        </p>
+        <p>
+          My undergraduate thesis compared DenseNet121 and EfficientNet-B0 for
+          detecting disease in corn leaves from images. It was my first sustained
+          piece of research, and the most valuable part wasn't the modelling — it
+          was learning how much of a result depends on decisions made before
+          training starts: how the data is split, what is held out, and what the
+          number on the screen actually describes.
+        </p>
+        <p>
+          I studied software engineering at Daffodil International University,
+          graduating in June 2026. That background shapes how I approach research:
+          I'd rather ship something reproducible than something impressive — and I
+          can build the surrounding system, not just the experiment.
+        </p>
+        <p>
+          I'm at the beginning of a research career and I'd rather say that plainly
+          than inflate it. What I have is work I can explain end to end, and a
+          clear direction: computer vision applied to problems where the data is
+          messy and the stakes are real.
+        </p>
+      </div>
+
+      <aside class="card-surface h-fit rounded-2xl p-6">
+        <dl class="space-y-5">
+          <div>
+            <dt class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">Based in</dt>
+            <dd class="mt-1.5 text-[13px] text-ink">{site.location}</dd>
           </div>
-          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
+          <div>
+            <dt class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">Focus</dt>
+            <dd class="mt-1.5 text-[13px] text-ink">Applied deep learning, computer vision</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">Education</dt>
+            <dd class="mt-1.5 text-[13px] text-ink">BSc Software Engineering, DIU · 2026</dd>
+          </div>
+          <div>
+            <dt class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">Status</dt>
+            <dd class="mt-1.5 text-[13px] text-mint">Open to research collaboration</dd>
+          </div>
+        </dl>
+        <div class="mt-6 border-t border-white/10 pt-5">
+          <p class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">Elsewhere</p>
+          <ul class="mt-3 space-y-1.5">
+            {site.socials.map((social) => (
+              <li>
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 text-[12px] text-muted transition-colors hover:text-mint"
+                >
+                  {social.label}
+                  <ArrowUpRight size={11} strokeWidth={1.75} aria-hidden="true" />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+    <div class="mt-8 grid gap-4 md:grid-cols-3">
+      {principles.map((principle, index) => (
+        <div class="card-surface rounded-2xl p-5">
+          <p class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">
             {String(index + 1).padStart(2, "0")}
           </p>
-          <h3 class="mt-8 font-display text-lg font-medium leading-snug tracking-tight text-ink">
-            {item.title}
+          <h3 class="mt-3 font-display text-[15px] font-medium leading-snug tracking-tight text-ink">
+            {principle.title}
           </h3>
-          <p class="mt-3 text-[13px] leading-relaxed text-muted">{item.body}</p>
+          <p class="mt-2.5 text-[12px] leading-relaxed text-muted">{principle.body}</p>
         </div>
       ))}
     </div>
   </section>
 
+  <!-- Research -->
+  <section id="research" class="reveal scroll-mt-28 border-t border-white/10 py-16 sm:py-20">
+    <SectionHeading
+      eyebrow="Research"
+      title="One question, documented end to end"
+      description="The thesis is the whole research record so far. It is shown in full rather than trimmed to a headline number."
+      href="/projects/corn-leaf-disease"
+      linkLabel="Read the study"
+    />
+
+    <div class="mt-9 grid gap-4 lg:grid-cols-5">
+      {featured && (
+        <article class="card-surface relative overflow-hidden rounded-2xl p-7 sm:p-8 lg:col-span-3">
+          <div
+            class="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-mint/10 blur-3xl"
+            aria-hidden="true"
+          >
+          </div>
+          <div class="relative">
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">
+              {featured.period}
+            </p>
+            <h3 class="mt-4 font-display text-2xl font-semibold leading-tight tracking-tight text-ink sm:text-3xl">
+              {featured.title}
+            </h3>
+            <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted">{featured.summary}</p>
+
+            <dl class="mt-6 grid gap-2 sm:grid-cols-2">
+              <div class="rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3">
+                <dt class="font-mono text-[9px] uppercase tracking-[0.14em] text-faint">Model A</dt>
+                <dd class="mt-1 font-mono text-[11px] text-mint">DenseNet121</dd>
+              </div>
+              <div class="rounded-xl border border-white/5 bg-white/[0.02] px-4 py-3">
+                <dt class="font-mono text-[9px] uppercase tracking-[0.14em] text-faint">Model B</dt>
+                <dd class="mt-1 font-mono text-[11px] text-azure">EfficientNet-B0</dd>
+              </div>
+            </dl>
+
+            <div class="mt-6 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex flex-wrap gap-1.5">
+                {featured.tags.map((tag) => (
+                  <span class="rounded-full border border-line px-2.5 py-0.5 font-mono text-[9px] text-faint">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <a
+                href={featured.href}
+                class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-muted transition-colors hover:text-mint"
+              >
+                Case study
+                <ArrowUpRight size={12} strokeWidth={1.75} aria-hidden="true" />
+              </a>
+            </div>
+          </div>
+        </article>
+      )}
+
+      <div class="grid gap-4 lg:col-span-2">
+        {researchInterests.map((interest, index) => (
+          <div class="card-surface rounded-2xl p-5">
+            <div class="flex items-start justify-between gap-3">
+              <h3 class="font-display text-[15px] font-medium leading-snug tracking-tight text-ink">
+                {interest.title}
+              </h3>
+              <span class="font-mono text-[9px] text-faint">
+                {String(index + 1).padStart(2, "0")}
+              </span>
+            </div>
+            <p class="mt-2 text-[12px] leading-relaxed text-muted">{interest.detail}</p>
+          </div>
+        ))}
+
+        <div class="rounded-2xl border border-dashed border-line p-5">
+          <div class="flex items-center justify-between gap-3">
+            <p class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">Publications</p>
+            <span class="rounded-full border border-line px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.14em] text-faint">
+              {publications.length === 0 ? "None yet" : `${publications.length} listed`}
+            </span>
+          </div>
+          <p class="mt-2 text-[12px] leading-relaxed text-muted">
+            {publications.length === 0
+              ? "No peer-reviewed papers to list. The section stays empty rather than aspirational."
+              : "Peer-reviewed work as it appears."}
+          </p>
+          <a
+            href="/publications"
+            class="mt-3 inline-flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted transition-colors hover:text-mint"
+          >
+            Publications
+            <ArrowUpRight size={10} strokeWidth={1.75} aria-hidden="true" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Selected work -->
-  <section class="reveal border-t border-white/10 py-16 sm:py-20">
+  <section id="projects" class="reveal scroll-mt-28 border-t border-white/10 py-16 sm:py-20">
     <SectionHeading
       eyebrow="Selected work"
       title="Projects, not screenshots"
@@ -290,7 +453,7 @@ const secondary = projects[1];
   </section>
 
   <!-- Toolkit -->
-  <section class="reveal border-t border-white/10 py-16 sm:py-20">
+  <section id="toolkit" class="reveal scroll-mt-28 border-t border-white/10 py-16 sm:py-20">
     <SectionHeading
       eyebrow="Toolkit"
       title="Stack and methods"
@@ -318,59 +481,12 @@ const secondary = projects[1];
     </div>
   </section>
 
-  <!-- Journey -->
-  <section class="reveal grid gap-10 border-t border-white/10 py-16 sm:py-20 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
-    <div>
-      <p class="eyebrow">
-        <span class="h-px w-7 bg-mint/60" aria-hidden="true"></span>
-        Journey
-      </p>
-      <h2 class="mt-4 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
-        A short, honest timeline
-      </h2>
-      <p class="mt-3 max-w-sm text-sm leading-relaxed text-muted">
-        I'm at the beginning of a research career and I'd rather say that plainly
-        than inflate it. What I have is work I can explain end to end.
-      </p>
-      <a href="/cv" class="btn btn-ghost mt-7">
-        Open the CV
-        <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
-      </a>
-    </div>
+  <ResumeSection />
 
-    <ol class="relative space-y-8 border-l border-white/10 pl-7">
-      {journey.map((item) => (
-        <li class="relative">
-          <span
-            class="absolute -left-[35px] top-1.5 grid h-4 w-4 place-items-center rounded-full border border-mint/30 bg-canvas"
-            aria-hidden="true"
-          >
-            <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>
-          </span>
-          <div class="flex flex-wrap items-center gap-3">
-            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">{item.period}</p>
-            <span class="rounded-full border border-line px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-faint">
-              {item.tag}
-            </span>
-          </div>
-          <h3 class="mt-2.5 font-display text-lg font-medium tracking-tight text-ink">
-            {item.title}
-          </h3>
-          <p class="mt-2 max-w-lg text-[13px] leading-relaxed text-muted">{item.body}</p>
-          <a
-            href={item.href}
-            class="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-faint transition-colors hover:text-mint"
-          >
-            Details
-            <ArrowUpRight size={11} strokeWidth={1.75} aria-hidden="true" />
-          </a>
-        </li>
-      ))}
-    </ol>
-  </section>
+  <Terminal />
 
   <!-- Contact CTA -->
-  <section class="reveal py-16 sm:py-20">
+  <section id="contact" class="reveal scroll-mt-28 py-16 sm:py-20">
     <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-linear-to-b from-white/[0.06] to-white/[0.01] p-8 sm:p-12">
       <div
         class="pointer-events-none absolute -right-24 -top-32 h-80 w-80 rounded-full bg-mint/15 blur-3xl"
@@ -409,7 +525,7 @@ const secondary = projects[1];
           </button>
         </div>
 
-        <p class="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+        <p class="mt-6 break-all font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
           {site.email} · {site.phone}
         </p>
       </div>

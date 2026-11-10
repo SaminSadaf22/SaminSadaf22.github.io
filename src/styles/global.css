@@ -243,6 +243,33 @@
   }
 }
 
+/* Nav and terminal states live outside @layer components so utility classes
+   (text-muted, border-white/10) cannot override the current/focus state. */
+.nav-dot {
+  opacity: 0;
+}
+
+.nav-link.is-current {
+  background-color: rgb(255 255 255 / 0.1);
+  color: var(--color-ink);
+}
+
+.nav-link-mobile.is-current {
+  background-color: rgb(255 255 255 / 0.05);
+  color: var(--color-mint);
+}
+
+.nav-link-mobile.is-current .nav-dot {
+  opacity: 1;
+}
+
+.terminal-shell:focus-within {
+  border-color: rgb(94 234 212 / 0.35);
+  box-shadow:
+    0 0 0 1px rgb(94 234 212 / 0.12),
+    0 40px 100px -60px rgb(94 234 212 / 0.45);
+}
+
 @keyframes drift {
   from {
     transform: translate3d(0, 0, 0) scale(1);
@@ -255,5 +282,43 @@
 @keyframes marquee {
   to {
     transform: translateX(-50%);
+  }
+}
+
+/* Printing: strip the site chrome rather than trying to restyle it. The fixed
+   ambient layer is removed here because fixed elements can repeat on every
+   printed page and leave blank trailing sheets. */
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #111 !important;
+    min-height: 0 !important;
+  }
+
+  body {
+    overflow: visible !important;
+  }
+
+  #ambient,
+  #scroll-progress,
+  #to-top,
+  #skip-link,
+  [data-site-chrome],
+  .print-hide,
+  [data-nav-panel] {
+    display: none !important;
+  }
+
+  main {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .js .reveal {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

@@ -18,23 +18,28 @@ export const site = {
   ],
 } as const;
 
+// The primary nav is a scroll map for the single-page home. Deep pages still
+// exist for the case study, printable CV and archives, and are linked in the
+// footer.
 export const nav = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Research", href: "/research" },
-  { label: "Projects", href: "/projects" },
-  { label: "CV", href: "/cv" },
-  { label: "Contact", href: "/contact" },
+  { label: "Home", href: "/#top" },
+  { label: "About", href: "/#about" },
+  { label: "Research", href: "/#research" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Resume", href: "/#resume" },
+  { label: "Terminal", href: "/#terminal" },
+  { label: "Contact", href: "/#contact" },
 ] as const;
 
 export const footerNav = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Research", href: "/research" },
-  { label: "Projects", href: "/projects" },
+  { label: "Home", href: "/#top" },
+  { label: "About", href: "/#about" },
+  { label: "Research", href: "/#research" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Resume", href: "/#resume" },
+  { label: "Terminal", href: "/#terminal" },
   { label: "Publications", href: "/publications" },
   { label: "Technical profile", href: "/profile" },
   { label: "Education", href: "/education" },
   { label: "CV", href: "/cv" },
-  { label: "Contact", href: "/contact" },
 ] as const;
