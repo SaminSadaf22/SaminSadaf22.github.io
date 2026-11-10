@@ -4,7 +4,7 @@ export const site = {
   title: "Samin Sadaf | AI Researcher & Builder",
   description:
     "Samin Sadaf is an AI researcher and builder working on deep learning for agricultural disease detection, and a software engineering graduate from Daffodil International University.",
-  url: "https://saminsadaf22.github.io",
+  url: "https://saminsadaf.me",
   location: "Dhaka, Bangladesh",
   email: "md.saminsadaf@gmail.com",
   // Shown as written locally; the tel: link needs the country code.
@@ -23,8 +23,17 @@ export const nav = [
   { label: "About", href: "/about" },
   { label: "Research", href: "/research" },
   { label: "Projects", href: "/projects" },
+  { label: "CV", href: "/cv" },
+  { label: "Contact", href: "/contact" },
+] as const;
+
+export const footerNav = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Research", href: "/research" },
+  { label: "Projects", href: "/projects" },
   { label: "Publications", href: "/publications" },
-  { label: "Profile", href: "/profile" },
+  { label: "Technical profile", href: "/profile" },
   { label: "Education", href: "/education" },
   { label: "CV", href: "/cv" },
   { label: "Contact", href: "/contact" },

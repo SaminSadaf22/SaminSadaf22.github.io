@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import { researchInterests } from "../data/profile";
 ---
 
@@ -7,16 +8,12 @@ import { researchInterests } from "../data/profile";
   title="Research"
   description="Research by Samin Sadaf on applied deep learning and computer vision for agriculture."
 >
-  <section class="border-b border-line py-14">
-    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Research</p>
-    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">
-      Applied deep learning, honestly evaluated.
-    </h1>
-    <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted">
-      My work so far is a single thesis project, documented in full rather than
-      summarised into a headline.
-    </p>
-  </section>
+  <PageHero
+    eyebrow="Research"
+    title="Applied deep learning,"
+    accent="honestly evaluated."
+    description="My work so far is a single thesis project, documented in full rather than summarised into a headline."
+  />
 
   <section class="border-b border-line py-14">
     <h2 class="font-display text-xl font-medium tracking-tight">Current work</h2>

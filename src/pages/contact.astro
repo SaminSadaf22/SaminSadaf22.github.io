@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import { site } from "../data/site";
 ---
 
@@ -7,13 +8,12 @@ import { site } from "../data/site";
   title="Contact"
   description="Contact Samin Sadaf by email or phone."
 >
-  <section class="border-b border-line py-14">
-    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Contact</p>
-    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">Say hello</h1>
-    <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted">
-      Email is the most direct route. I reply to anything specific about the work.
-    </p>
-  </section>
+  <PageHero
+    eyebrow="Contact"
+    title="Say"
+    accent="hello."
+    description="Email is the most direct route. I reply to anything specific about the work."
+  />
 
   <section class="grid gap-px border-b border-line bg-line md:grid-cols-2">
     <div class="bg-canvas p-8">

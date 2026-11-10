@@ -1,8 +1,8 @@
 ---
 import "../styles/global.css";
-import { ArrowUp } from "@lucide/astro";
+import { ArrowUp, ArrowUpRight } from "@lucide/astro";
 import Navbar from "../components/Navbar.astro";
-import { nav, site } from "../data/site";
+import { footerNav, site } from "../data/site";
 
 interface Props {
   title?: string;
@@ -13,6 +13,8 @@ const { title, description = site.description } = Astro.props;
 const pageTitle = title ? `${title} — ${site.name}` : site.title;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL("/og.png", site.url).href;
+const footerPages = footerNav.slice(0, 5);
+const footerMore = footerNav.slice(5);
 ---
 
 <!doctype html>
@@ -23,7 +25,7 @@ const ogImage = new URL("/og.png", site.url).href;
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#090D16" />
+    <meta name="theme-color" content="#060810" />
     <meta name="generator" content={Astro.generator} />
 
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
@@ -45,52 +47,118 @@ const ogImage = new URL("/og.png", site.url).href;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap"
     />
+    <script is:inline>
+      document.documentElement.classList.add("js");
+    </script>
   </head>
 
-  <body class="min-h-dvh bg-canvas font-sans text-ink antialiased">
+  <body class="relative min-h-dvh overflow-x-hidden bg-canvas font-sans text-ink antialiased">
+    <!-- Ambient background -->
+    <div class="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
+      <div class="absolute inset-0 bg-grid"></div>
+      <div class="aurora aurora-mint"></div>
+      <div class="aurora aurora-violet"></div>
+      <div class="aurora aurora-azure"></div>
+      <div class="absolute inset-0 bg-linear-to-b from-transparent via-canvas/40 to-canvas"></div>
+    </div>
+
     <a
       href="#content"
-      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:border focus:border-mint focus:bg-canvas focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-mint"
+      class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:border focus:border-mint focus:bg-canvas focus:px-4 focus:py-2 focus:font-mono focus:text-xs focus:text-mint"
     >
       Skip to content
     </a>
 
     <Navbar />
 
-    <main id="content" class="mx-auto w-full max-w-6xl px-5 sm:px-8">
+    <main id="content" class="relative mx-auto w-full max-w-6xl px-5 sm:px-8">
       <slot />
     </main>
 
-    <footer class="mt-24 border-t border-line">
-      <div class="mx-auto grid w-full max-w-6xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1fr_auto]">
-        <div class="space-y-2">
-          <p class="font-display text-sm font-medium text-ink">{site.name}</p>
-          <p class="font-mono text-[11px] uppercase tracking-[0.18em] text-faint">
-            {site.role} · {site.location}
-          </p>
-          <a href={`mailto:${site.email}`} class="inline-block font-mono text-xs text-muted hover:text-mint">
-            {site.email}
-          </a>
-        </div>
+    <footer class="relative mt-24 border-t border-white/10">
+      <div class="mx-auto w-full max-w-6xl px-5 sm:px-8">
+        <div class="grid gap-10 py-14 md:grid-cols-[1.5fr_1fr_1fr] md:gap-8">
+          <div>
+            <a href="/" class="inline-flex items-center gap-2.5">
+              <span
+                class="grid h-9 w-9 place-items-center rounded-xl border border-mint/25 bg-linear-to-br from-mint/20 to-azure/5 font-display text-[11px] font-semibold tracking-[0.12em] text-mint"
+              >
+                SS
+              </span>
+              <span class="font-display text-sm font-medium tracking-tight text-ink">{site.name}</span>
+            </a>
+            <p class="mt-5 max-w-xs text-sm leading-relaxed text-muted">
+              Applied deep learning, documented honestly. Open to research
+              collaborations and conversations about computer vision.
+            </p>
+            <div class="mt-5 flex flex-wrap gap-2">
+              {site.socials.map((social) => (
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted transition-colors hover:border-mint/40 hover:text-mint"
+                >
+                  {social.label}
+                  <ArrowUpRight size={11} strokeWidth={1.75} aria-hidden="true" />
+                </a>
+              ))}
+            </div>
+          </div>
 
-        <nav aria-label="Footer">
-          <ul class="grid grid-cols-2 gap-x-8 gap-y-2 sm:grid-cols-3">
-            {nav.map((item) => (
+          <nav aria-label="Footer pages">
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">Pages</p>
+            <ul class="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 md:grid-cols-1">
+              {footerPages.map((item) => (
+                <li>
+                  <a href={item.href} class="text-[13px] text-muted transition-colors hover:text-mint">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <div>
+            <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">More</p>
+            <ul class="mt-4 grid grid-cols-2 gap-x-6 gap-y-2.5 md:grid-cols-1">
+              {footerMore.map((item) => (
+                <li>
+                  <a href={item.href} class="text-[13px] text-muted transition-colors hover:text-mint">
+                    {item.label}
+                  </a>
+                </li>
+              ))}
               <li>
-                <a href={item.href} class="font-mono text-[11px] uppercase tracking-[0.14em] text-muted hover:text-mint">
-                  {item.label}
+                <a
+                  href={`mailto:${site.email}`}
+                  class="break-all text-[13px] text-muted transition-colors hover:text-mint"
+                >
+                  Email
                 </a>
               </li>
-            ))}
-          </ul>
-        </nav>
-      </div>
-      <div class="mx-auto w-full max-w-6xl border-t border-line/70 px-5 py-5 sm:px-8">
-        <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
-          © {new Date().getFullYear()} {site.name} · Built with Astro
+            </ul>
+          </div>
+        </div>
+
+        <p
+          class="select-none overflow-hidden font-display text-[clamp(2.4rem,12.5vw,9rem)] font-semibold leading-none tracking-[-0.045em] text-transparent"
+          style="-webkit-text-stroke: 1px rgba(255,255,255,0.09)"
+          aria-hidden="true"
+        >
+          SAMIN SADAF
         </p>
+
+        <div class="flex flex-col gap-3 border-t border-white/10 py-6 sm:flex-row sm:items-center sm:justify-between">
+          <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            © {new Date().getFullYear()} {site.name} · {site.location}
+          </p>
+          <p class="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+            Built with Astro · Deployed on Vercel
+          </p>
+        </div>
       </div>
     </footer>
 
@@ -98,7 +166,7 @@ const ogImage = new URL("/og.png", site.url).href;
       type="button"
       id="to-top"
       aria-label="Back to top"
-      class="fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center border border-line bg-card text-muted opacity-0 transition-opacity hover:border-mint hover:text-mint pointer-events-none"
+      class="pointer-events-none fixed bottom-6 right-6 z-40 inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/10 bg-[#070b14]/80 text-muted opacity-0 backdrop-blur transition-all hover:border-mint/40 hover:text-mint"
     >
       <ArrowUp size={16} strokeWidth={1.75} aria-hidden="true" />
     </button>
@@ -119,6 +187,23 @@ const ogImage = new URL("/og.png", site.url).href;
           window.scrollTo({ top: 0, behavior: reduced.matches ? "auto" : "smooth" }),
         );
         update();
+      }
+
+      // Reveal sections as they enter the viewport.
+      const reveals = document.querySelectorAll<HTMLElement>(".reveal");
+      if (reveals.length) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: "0px 0px -8% 0px", threshold: 0.05 },
+        );
+        reveals.forEach((element) => observer.observe(element));
       }
     </script>
   </body>

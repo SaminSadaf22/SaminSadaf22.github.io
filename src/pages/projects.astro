@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import { projects } from "../data/projects";
 
 const filters = ["All", "AI Research", "Software Engineering"] as const;
@@ -9,13 +10,11 @@ const filters = ["All", "AI Research", "Software Engineering"] as const;
   title="Projects"
   description="Research and engineering projects by Samin Sadaf."
 >
-  <section class="border-b border-line py-14">
-    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Work</p>
-    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">Projects</h1>
-    <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted">
-      Applied research first, software engineering second.
-    </p>
-  </section>
+  <PageHero
+    eyebrow="Work"
+    title="Projects"
+    description="Applied research first, software engineering second. Each entry says what it does and what I actually did."
+  />
 
   <section class="py-10">
     <div class="flex flex-wrap gap-2" role="group" aria-label="Filter projects">

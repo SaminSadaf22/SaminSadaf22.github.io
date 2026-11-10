@@ -1,15 +1,17 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import PageHero from "../components/PageHero.astro";
 ---
 
 <MainLayout
   title="Education"
   description="Education of Samin Sadaf — BSc in Software Engineering, Daffodil International University."
 >
-  <section class="border-b border-line py-14">
-    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Academic</p>
-    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">Education</h1>
-  </section>
+  <PageHero
+    eyebrow="Academic"
+    title="Education"
+    description="BSc in Software Engineering at Daffodil International University — graduated June 2026."
+  />
 
   <section class="py-14">
     <div class="border border-line bg-card p-6 sm:p-8">

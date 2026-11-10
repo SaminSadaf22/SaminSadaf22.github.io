@@ -1,6 +1,11 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import NeuralVisual from "../components/NeuralVisual.astro";
+import SectionHeading from "../components/SectionHeading.astro";
+import { site } from "../data/site";
+import { skillGroups } from "../data/profile";
+import { projects } from "../data/projects";
+import { ArrowRight, ArrowUpRight, Copy, MapPin } from "@lucide/astro";
 
 const focus = [
   {
@@ -16,18 +21,67 @@ const focus = [
     body: "Documenting datasets, seeds and splits so a reported result can actually be re-run by someone else.",
   },
 ];
+
+const marqueeItems = [
+  ...skillGroups.flatMap((group) => group.items),
+  "DenseNet121",
+  "EfficientNet-B0",
+  "Deep learning",
+];
+
+const journey = [
+  {
+    period: "2026",
+    tag: "Education",
+    title: "BSc in Software Engineering",
+    body: "Graduated from Daffodil International University, Dhaka.",
+    href: "/education",
+  },
+  {
+    period: "2026",
+    tag: "Research",
+    title: "Undergraduate thesis",
+    body: "A controlled DenseNet121 vs EfficientNet-B0 comparison for corn leaf disease detection.",
+    href: "/projects/corn-leaf-disease",
+  },
+  {
+    period: "Now",
+    tag: "Next",
+    title: "Open to collaboration",
+    body: "Looking for research work in applied computer vision and evaluation that can be reproduced.",
+    href: "/contact",
+  },
+];
+
+const featured = projects[0];
+const secondary = projects[1];
 ---
 
 <MainLayout>
   <!-- Hero -->
-  <section class="grid items-center gap-12 border-b border-line py-16 md:py-24 lg:grid-cols-[1.1fr_1fr]">
-    <div>
-      <p class="font-mono text-[11px] uppercase tracking-[0.22em] text-faint">
-        AI Researcher &amp; Builder · Dhaka, Bangladesh
-      </p>
-      <h1 class="mt-6 font-display text-4xl font-medium leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl">
-        Samin Sadaf
+  <section class="relative grid items-center gap-14 pb-16 pt-14 sm:pt-20 lg:grid-cols-[1.06fr_0.94fr] lg:gap-12 lg:pt-24">
+    <div class="reveal">
+      <div
+        class="inline-flex items-center gap-2.5 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 backdrop-blur"
+      >
+        <span class="relative flex h-1.5 w-1.5" aria-hidden="true">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-mint opacity-60"></span>
+          <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-mint"></span>
+        </span>
+        <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-muted">
+          Open to research collaborations
+        </span>
+      </div>
+
+      <h1 class="mt-7 font-display text-5xl font-semibold leading-[0.95] tracking-tight sm:text-7xl lg:text-[5.1rem]">
+        Samin <span class="text-gradient">Sadaf</span>
       </h1>
+
+      <p class="mt-6 font-serif text-2xl italic leading-snug text-muted sm:text-[1.75rem]">
+        Applied deep learning,<br class="hidden sm:block" />
+        <span class="text-mint">honestly evaluated.</span>
+      </p>
+
       <p class="mt-6 max-w-xl text-base leading-relaxed text-muted">
         I work on applied deep learning, most recently on detecting disease in
         corn leaves from images. My focus is on models that can be evaluated
@@ -36,92 +90,352 @@ const focus = [
       </p>
 
       <div class="mt-8 flex flex-wrap items-center gap-3">
-        <a
-          href="/research"
-          class="inline-flex items-center gap-2 border border-mint px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-mint transition-colors hover:bg-mint hover:text-canvas"
-        >
-          Research
+        <a href="/research" class="btn btn-primary">
+          Explore my research
+          <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
         </a>
-        <a
-          href="/projects"
-          class="inline-flex items-center gap-2 border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:border-muted hover:text-ink"
-        >
-          Projects
-        </a>
-        <a
-          href="/cv"
-          class="inline-flex items-center gap-2 px-2 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-faint transition-colors hover:text-mint"
-        >
-          Curriculum Vitae
+        <a href="/projects" class="btn btn-ghost">
+          View projects
+          <ArrowRight size={14} strokeWidth={1.75} aria-hidden="true" />
         </a>
       </div>
-    </div>
 
-    <NeuralVisual class="order-first lg:order-none" />
-  </section>
-
-  <!-- Featured research -->
-  <section class="border-b border-line py-16">
-    <div class="flex items-baseline justify-between gap-6">
-      <h2 class="font-display text-xl font-medium tracking-tight">Current research</h2>
-      <a href="/research" class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint hover:text-mint">
-        All research
-      </a>
-    </div>
-
-    <a
-      href="/projects/corn-leaf-disease"
-      class="group mt-6 block border border-line bg-card p-6 transition-colors hover:border-mint/50 sm:p-8"
-    >
-      <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">Thesis · Deep learning</p>
-      <h3 class="mt-3 font-display text-2xl font-medium tracking-tight text-ink">
-        Corn Leaf Disease Detection Using Deep Learning
-      </h3>
-      <p class="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
-        A comparative study of DenseNet121 and EfficientNet-B0 for classifying
-        corn leaf disease from images, built as my undergraduate thesis at
-        Daffodil International University.
-      </p>
-      <div class="mt-6 flex flex-wrap items-center gap-2">
-        {["DenseNet121", "EfficientNet-B0", "Transfer learning"].map((tag) => (
-          <span class="border border-line px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.12em] text-faint">
-            {tag}
-          </span>
-        ))}
-        <span class="ml-auto font-mono text-[10px] uppercase tracking-[0.18em] text-muted group-hover:text-mint">
-          Read the study →
+      <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+        <span class="inline-flex items-center gap-1.5">
+          <MapPin size={12} strokeWidth={1.75} aria-hidden="true" />
+          {site.location}
         </span>
+        <span class="hidden h-3 w-px bg-line sm:block" aria-hidden="true"></span>
+        <span>{site.role}</span>
       </div>
-    </a>
+    </div>
+
+    <!-- Thesis panel -->
+    <div class="reveal relative" style="transition-delay: 120ms">
+      <div
+        class="absolute -inset-5 rounded-[2.5rem] bg-linear-to-br from-mint/20 via-transparent to-violet/20 blur-3xl"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-[#080d17]/85 p-1.5 shadow-[0_40px_90px_-50px_rgba(0,0,0,1)] backdrop-blur">
+        <div class="flex items-center gap-2 px-3 py-2">
+          <span class="h-2 w-2 rounded-full bg-[#ff5f57]/70" aria-hidden="true"></span>
+          <span class="h-2 w-2 rounded-full bg-[#febc2e]/70" aria-hidden="true"></span>
+          <span class="h-2 w-2 rounded-full bg-[#28c840]/70" aria-hidden="true"></span>
+          <span class="ml-auto font-mono text-[10px] tracking-[0.14em] text-faint">thesis.2026</span>
+        </div>
+
+        <div class="rounded-2xl border border-white/5 bg-[#060a12] p-5 sm:p-6">
+          <NeuralVisual />
+
+          <div class="mt-5 flex items-center justify-between gap-3 border-t border-white/5 pt-4">
+            <div>
+              <p class="font-mono text-[9px] uppercase tracking-[0.18em] text-faint">Thesis</p>
+              <p class="mt-1.5 text-sm font-medium text-ink">Corn leaf disease detection</p>
+            </div>
+            <a
+              href="/projects/corn-leaf-disease"
+              aria-label="Read the corn leaf disease thesis"
+              class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-white/10 text-muted transition-colors hover:border-mint/40 hover:text-mint"
+            >
+              <ArrowUpRight size={15} strokeWidth={1.75} aria-hidden="true" />
+            </a>
+          </div>
+
+          <dl class="mt-4 grid grid-cols-2 gap-2">
+            <div class="rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5">
+              <dt class="font-mono text-[9px] uppercase tracking-[0.14em] text-faint">Model A</dt>
+              <dd class="mt-1 font-mono text-[11px] text-mint">DenseNet121</dd>
+            </div>
+            <div class="rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5">
+              <dt class="font-mono text-[9px] uppercase tracking-[0.14em] text-faint">Model B</dt>
+              <dd class="mt-1 font-mono text-[11px] text-azure">EfficientNet-B0</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </div>
   </section>
+
+  <!-- Skill ribbon -->
+  <div class="marquee -mx-5 border-y border-white/10 py-4 sm:-mx-8">
+    <div class="marquee-track">
+      {[...marqueeItems, ...marqueeItems].map((item, index) => (
+        <span
+          class="flex items-center gap-3 px-5 font-mono text-[11px] uppercase tracking-[0.18em] text-faint"
+          aria-hidden={index >= marqueeItems.length ? "true" : undefined}
+        >
+          <span class="h-1 w-1 rounded-full bg-mint/60" aria-hidden="true"></span>
+          {item}
+        </span>
+      ))}
+    </div>
+  </div>
 
   <!-- Focus -->
-  <section class="border-b border-line py-16">
-    <h2 class="font-display text-xl font-medium tracking-tight">Focus</h2>
-    <div class="mt-8 grid gap-px border border-line bg-line sm:grid-cols-3">
+  <section class="reveal py-16 sm:py-20">
+    <SectionHeading
+      eyebrow="What I do"
+      title="Research with the numbers left intact"
+      description="Three threads run through my work: the problem, the method, and whether the result can survive being re-run."
+    />
+
+    <div class="mt-9 grid gap-4 md:grid-cols-3">
       {focus.map((item, index) => (
-        <div class="bg-canvas p-6">
+        <div class="card-surface group relative overflow-hidden rounded-2xl p-6 sm:p-7">
+          <div
+            class="absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-mint/50 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+            aria-hidden="true"
+          >
+          </div>
           <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
             {String(index + 1).padStart(2, "0")}
           </p>
-          <h3 class="mt-4 font-display text-base font-medium tracking-tight text-ink">{item.title}</h3>
-          <p class="mt-3 text-sm leading-relaxed text-muted">{item.body}</p>
+          <h3 class="mt-8 font-display text-lg font-medium leading-snug tracking-tight text-ink">
+            {item.title}
+          </h3>
+          <p class="mt-3 text-[13px] leading-relaxed text-muted">{item.body}</p>
         </div>
       ))}
     </div>
   </section>
 
-  <!-- Footer CTA -->
-  <section class="py-16">
-    <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">Get in touch</p>
-    <p class="mt-4 max-w-2xl font-display text-2xl font-medium leading-snug tracking-tight text-ink sm:text-3xl">
-      Open to research collaboration and conversations about applied deep learning.
-    </p>
-    <a
-      href="/contact"
-      class="mt-6 inline-flex items-center gap-2 border border-line px-5 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted transition-colors hover:border-mint hover:text-mint"
-    >
-      Contact
-    </a>
+  <!-- Selected work -->
+  <section class="reveal border-t border-white/10 py-16 sm:py-20">
+    <SectionHeading
+      eyebrow="Selected work"
+      title="Projects, not screenshots"
+      description="One research project documented end to end, plus the engineering work that came before it."
+      href="/projects"
+      linkLabel="All projects"
+    />
+
+    <div class="mt-9 grid gap-4 lg:grid-cols-5">
+      {featured && (
+        <a
+          href={featured.href ?? "/projects"}
+          class="card-surface group relative flex flex-col justify-between overflow-hidden rounded-2xl p-7 sm:p-9 lg:col-span-3"
+        >
+          <div
+            class="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-mint/10 blur-3xl transition-opacity duration-500 group-hover:bg-mint/20"
+            aria-hidden="true"
+          >
+          </div>
+
+          <div class="relative">
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">
+              {featured.category} · 2026
+            </p>
+            <h3 class="mt-4 max-w-xl font-display text-2xl font-semibold leading-tight tracking-tight text-ink sm:text-3xl">
+              {featured.title}
+            </h3>
+            <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted">{featured.summary}</p>
+          </div>
+
+          <div class="relative mt-9 flex flex-wrap items-end justify-between gap-4">
+            <div class="flex flex-wrap gap-2">
+              {featured.tags.map((tag) => (
+                <span class="rounded-full border border-line bg-white/[0.02] px-3 py-1 font-mono text-[10px] tracking-[0.08em] text-faint">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <span class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted transition-colors group-hover:text-mint">
+              Read the study
+              <ArrowUpRight size={13} strokeWidth={1.75} aria-hidden="true" />
+            </span>
+          </div>
+        </a>
+      )}
+
+      <div class="grid gap-4 lg:col-span-2">
+        {secondary && (
+          <div class="card-surface flex flex-col rounded-2xl p-6">
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">
+              {secondary.category}
+            </p>
+            <h3 class="mt-3 font-display text-lg font-medium leading-snug tracking-tight text-ink">
+              {secondary.title}
+            </h3>
+            <p class="mt-3 flex-1 text-[13px] leading-relaxed text-muted">{secondary.summary}</p>
+            <div class="mt-5 flex flex-wrap gap-2">
+              {secondary.tags.map((tag) => (
+                <span class="rounded-full border border-line px-2.5 py-0.5 font-mono text-[10px] text-faint">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <a
+          href="/projects"
+          class="group flex items-center justify-between gap-4 rounded-2xl border border-dashed border-line px-6 py-5 transition-colors hover:border-mint/40"
+        >
+          <span>
+            <span class="block font-display text-base font-medium tracking-tight text-ink">
+              More work
+            </span>
+            <span class="mt-1 block font-mono text-[10px] uppercase tracking-[0.14em] text-faint">
+              Research and engineering
+            </span>
+          </span>
+          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-line text-muted transition-colors group-hover:border-mint/40 group-hover:text-mint">
+            <ArrowRight size={15} strokeWidth={1.75} aria-hidden="true" />
+          </span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Toolkit -->
+  <section class="reveal border-t border-white/10 py-16 sm:py-20">
+    <SectionHeading
+      eyebrow="Toolkit"
+      title="Stack and methods"
+      description="What I reach for, listed plainly — no proficiency scores, no invented tools."
+      href="/profile"
+      linkLabel="Technical profile"
+    />
+
+    <div class="mt-9 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {skillGroups.map((group, index) => (
+        <div class="card-surface rounded-2xl p-6">
+          <div class="flex items-baseline justify-between gap-3">
+            <h3 class="font-mono text-[10px] uppercase tracking-[0.16em] text-mint">{group.title}</h3>
+            <span class="font-mono text-[10px] text-faint">{String(index + 1).padStart(2, "0")}</span>
+          </div>
+          <ul class="mt-5 flex flex-wrap gap-1.5">
+            {group.items.map((item) => (
+              <li class="rounded-full border border-line bg-white/[0.02] px-2.5 py-1 text-[11px] text-muted">
+                {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Journey -->
+  <section class="reveal grid gap-10 border-t border-white/10 py-16 sm:py-20 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+    <div>
+      <p class="eyebrow">
+        <span class="h-px w-7 bg-mint/60" aria-hidden="true"></span>
+        Journey
+      </p>
+      <h2 class="mt-4 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+        A short, honest timeline
+      </h2>
+      <p class="mt-3 max-w-sm text-sm leading-relaxed text-muted">
+        I'm at the beginning of a research career and I'd rather say that plainly
+        than inflate it. What I have is work I can explain end to end.
+      </p>
+      <a href="/cv" class="btn btn-ghost mt-7">
+        Open the CV
+        <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
+      </a>
+    </div>
+
+    <ol class="relative space-y-8 border-l border-white/10 pl-7">
+      {journey.map((item) => (
+        <li class="relative">
+          <span
+            class="absolute -left-[35px] top-1.5 grid h-4 w-4 place-items-center rounded-full border border-mint/30 bg-canvas"
+            aria-hidden="true"
+          >
+            <span class="h-1.5 w-1.5 rounded-full bg-mint"></span>
+          </span>
+          <div class="flex flex-wrap items-center gap-3">
+            <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">{item.period}</p>
+            <span class="rounded-full border border-line px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-faint">
+              {item.tag}
+            </span>
+          </div>
+          <h3 class="mt-2.5 font-display text-lg font-medium tracking-tight text-ink">
+            {item.title}
+          </h3>
+          <p class="mt-2 max-w-lg text-[13px] leading-relaxed text-muted">{item.body}</p>
+          <a
+            href={item.href}
+            class="mt-3 inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.14em] text-faint transition-colors hover:text-mint"
+          >
+            Details
+            <ArrowUpRight size={11} strokeWidth={1.75} aria-hidden="true" />
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- Contact CTA -->
+  <section class="reveal py-16 sm:py-20">
+    <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-linear-to-b from-white/[0.06] to-white/[0.01] p-8 sm:p-12">
+      <div
+        class="pointer-events-none absolute -right-24 -top-32 h-80 w-80 rounded-full bg-mint/15 blur-3xl"
+        aria-hidden="true"
+      >
+      </div>
+      <div
+        class="pointer-events-none absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-violet/10 blur-3xl"
+        aria-hidden="true"
+      >
+      </div>
+
+      <div class="relative max-w-2xl">
+        <p class="eyebrow">
+          <span class="h-px w-7 bg-mint/60" aria-hidden="true"></span>
+          Contact
+        </p>
+        <h2 class="mt-5 font-display text-3xl font-semibold leading-tight tracking-tight sm:text-4xl">
+          Let's work on something
+          <span class="text-gradient">worth evaluating.</span>
+        </h2>
+        <p class="mt-4 text-sm leading-relaxed text-muted sm:text-base">
+          Open to research collaboration and conversations about applied deep
+          learning. Email is the most direct route — I reply to anything specific
+          about the work.
+        </p>
+
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href={`mailto:${site.email}`} class="btn btn-primary">
+            Email me
+            <ArrowUpRight size={14} strokeWidth={1.75} aria-hidden="true" />
+          </a>
+          <button type="button" id="copy-email" data-email={site.email} class="btn btn-ghost">
+            <Copy size={13} strokeWidth={1.75} aria-hidden="true" />
+            <span data-copy-label>Copy email</span>
+          </button>
+        </div>
+
+        <p class="mt-6 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">
+          {site.email} · {site.phone}
+        </p>
+      </div>
+    </div>
   </section>
 </MainLayout>
+
+<script>
+  const copyButton = document.getElementById("copy-email");
+  copyButton?.addEventListener("click", async () => {
+    const email = copyButton.dataset.email;
+    if (!email) return;
+
+    try {
+      await navigator.clipboard.writeText(email);
+    } catch {
+      return;
+    }
+
+    const label = copyButton.querySelector("[data-copy-label]");
+    if (!label) return;
+
+    const original = label.textContent ?? "Copy email";
+    label.textContent = "Copied";
+    window.setTimeout(() => {
+      label.textContent = original;
+    }, 1800);
+  });
+</script>

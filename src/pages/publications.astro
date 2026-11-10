@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import { publications } from "../data/publications";
 ---
 
@@ -7,13 +8,11 @@ import { publications } from "../data/publications";
   title="Publications"
   description="Research publications by Samin Sadaf."
 >
-  <section class="border-b border-line py-14">
-    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Writing</p>
-    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">Publications</h1>
-    <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted">
-      Peer-reviewed papers, preprints and manuscripts.
-    </p>
-  </section>
+  <PageHero
+    eyebrow="Writing"
+    title="Publications"
+    description="Peer-reviewed papers, preprints and manuscripts. Nothing is listed here until it exists."
+  />
 
   <section class="py-14">
     {publications.length === 0 ? (

@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://saminsadaf22.github.io",
+  site: "https://saminsadaf.me",
   vite: {
     plugins: [tailwindcss()],
   },

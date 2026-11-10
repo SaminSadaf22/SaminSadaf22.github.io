@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import PageHero from "../components/PageHero.astro";
 import { site } from "../data/site";
 
 const principles = [
@@ -22,10 +23,12 @@ const principles = [
   title="About"
   description="About Samin Sadaf — an AI researcher and builder working on applied deep learning, based in Dhaka, Bangladesh."
 >
-  <section class="border-b border-line py-14">
-    <p class="font-mono text-[10px] uppercase tracking-[0.22em] text-faint">Profile</p>
-    <h1 class="mt-5 font-display text-4xl font-medium tracking-tight sm:text-5xl">About</h1>
-  </section>
+  <PageHero
+    eyebrow="Profile"
+    title="A researcher at the start,"
+    accent="and honest about it."
+    description="Applied deep learning, computer vision, and a bias toward work that can be re-run rather than admired."
+  />
 
   <section class="grid gap-12 py-14 lg:grid-cols-[1fr_280px]">
     <div class="space-y-6 text-base leading-relaxed text-muted">
