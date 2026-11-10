@@ -8,11 +8,18 @@ const generated = new Date().toLocaleDateString("en-GB", {
   month: "long",
   year: "numeric",
 });
+
+const contactLinks = [
+  { label: "Email", href: `mailto:${site.email}`, text: site.email },
+  { label: "Phone", href: `tel:${site.phoneHref}`, text: site.phone },
+  { label: "Location", href: null, text: site.location },
+  { label: "Website", href: site.url, text: resume.siteUrl },
+];
 ---
 
 <MainLayout
   title="Curriculum Vitae"
-  description="Curriculum vitae of Samin Sadaf — education, research project, technical skills and contact details."
+  description="Curriculum vitae of Samin Sadaf — education, projects, technical skills and contact details."
 >
   <div class="print-hide flex flex-col gap-5 pb-8 pt-10 sm:flex-row sm:items-end sm:justify-between sm:pt-14">
     <div>
@@ -25,7 +32,9 @@ const generated = new Date().toLocaleDateString("en-GB", {
       </h1>
       <p class="mt-3 max-w-xl text-sm leading-relaxed text-muted">
         A print-tuned copy of the site. Open the print dialog and choose
-        <span class="text-ink">Save as PDF</span> — the sheet switches to clean A4 pages.
+        <span class="text-ink">Save as PDF</span> — the sheet switches to clean A4 pages. In the
+        print dialog, turn off <span class="text-ink">Headers and footers</span> for a
+        clean result.
       </p>
     </div>
     <div class="flex flex-wrap items-center gap-2.5">
@@ -39,16 +48,10 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
   <article
     id="cv-sheet"
-    class="cv-sheet mx-auto mb-16 max-w-4xl overflow-hidden rounded-2xl bg-[#f7f8fa] text-[#111827] shadow-[0_50px_120px_-60px_rgba(0,0,0,1)] ring-1 ring-white/10"
+    class="cv-sheet mx-auto mb-16 max-w-3xl overflow-hidden rounded-2xl bg-[#f7f8fa] text-[#111827] shadow-[0_50px_120px_-60px_rgba(0,0,0,1)] ring-1 ring-white/10"
   >
-    <div
-      class="cv-accent h-1 w-full bg-linear-to-r from-[#0f766e] via-[#0891b2] to-[#7c3aed]"
-      aria-hidden="true"
-    >
-    </div>
-
-    <header class="cv-header border-b border-[#dfe4ea] px-6 py-7 sm:px-10 sm:py-9">
-      <div class="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
+    <header class="cv-header border-b border-[#dfe4ea] px-6 py-7 sm:px-8 sm:py-8">
+      <div class="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
           <h2 class="font-display text-3xl font-semibold tracking-tight text-[#0b1220] sm:text-4xl">
             {site.name}
@@ -58,202 +61,233 @@ const generated = new Date().toLocaleDateString("en-GB", {
           </p>
         </div>
 
-        <ul class="grid gap-1.5 text-[12px] leading-relaxed text-[#374151] sm:text-right">
-          <li>
-            <a href={`mailto:${site.email}`} class="transition-colors hover:text-[#0f766e]">
-              {site.email}
-            </a>
-          </li>
-          <li>
-            <a href={`tel:${site.phoneHref}`} class="transition-colors hover:text-[#0f766e]">
-              {site.phone}
-            </a>
-          </li>
-          <li>{site.location}</li>
-          <li class="font-mono text-[10px] uppercase tracking-[0.12em] text-[#6b7280]">
-            {resume.siteUrl}
-          </li>
+        <ul class="grid gap-1 text-[12px] leading-relaxed text-[#374151] sm:text-right">
+          {contactLinks.map((item) => (
+            <li>
+              {item.href ? (
+                <a href={item.href} class="transition-colors hover:text-[#0f766e]">
+                  {item.text}
+                </a>
+              ) : (
+                item.text
+              )}
+            </li>
+          ))}
         </ul>
       </div>
     </header>
 
-    <div class="cv-layout grid md:grid-cols-[1fr_242px]">
-      <div class="cv-main px-6 py-7 sm:px-10 sm:py-9">
-        <section class="cv-section">
-          <h3
-            class="cv-section-title font-mono text-[9px] uppercase tracking-[0.22em] text-[#6b7280]"
-          >
-            Profile
-          </h3>
-          <p class="mt-3 text-[13px] leading-relaxed text-[#374151]">{resume.summary}</p>
-        </section>
+    <div class="cv-body px-6 py-7 sm:px-8 sm:py-8">
+      <section class="cv-section">
+        <h3 class="cv-section-title">Profile</h3>
+        <p class="mt-3 text-[13px] leading-relaxed text-[#374151]">{resume.summary}</p>
+      </section>
 
-        <section class="cv-section mt-7">
-          <h3
-            class="cv-section-title font-mono text-[9px] uppercase tracking-[0.22em] text-[#6b7280]"
-          >
-            Education
-          </h3>
-          {resume.education.map((item) => (
-            <div class="cv-entry mt-3">
-              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
-                  {item.degree}
-                </h4>
-                <p class="font-mono text-[9px] uppercase tracking-[0.14em] text-[#6b7280]">
-                  {item.period}
-                </p>
-              </div>
-              <p class="mt-1 text-[13px] text-[#374151]">
-                {item.institution} · {item.location}
-              </p>
-              <p class="mt-2 text-[12px] leading-relaxed text-[#4b5563]">
-                {item.detail}
-              </p>
+      <section class="cv-section mt-7">
+        <h3 class="cv-section-title">Technical skills</h3>
+        <dl class="mt-3 space-y-2">
+          {resume.skills.map((group) => (
+            <div class="cv-skill-row">
+              <dt class="font-mono text-[9px] uppercase tracking-[0.12em] text-[#0f766e]">
+                {group.title}
+              </dt>
+              <dd class="text-[12px] leading-relaxed text-[#374151]">
+                {group.items.join(", ")}
+              </dd>
             </div>
           ))}
-        </section>
+        </dl>
+      </section>
 
-        <section class="cv-section mt-7">
-          <h3
-            class="cv-section-title font-mono text-[9px] uppercase tracking-[0.22em] text-[#6b7280]"
-          >
-            Research
-          </h3>
-          {resume.research.map((project) => (
-            <div class="cv-entry mt-3">
-              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
-                  {project.title}
-                </h4>
-                <p class="font-mono text-[9px] uppercase tracking-[0.14em] text-[#6b7280]">
-                  {project.period}
-                </p>
-              </div>
-              <p class="mt-1 text-[12px] text-[#6b7280]">{project.category}</p>
-              <p class="mt-2 text-[12px] leading-relaxed text-[#4b5563]">{project.summary}</p>
-              <ul class="mt-2.5 space-y-1.5">
+      <section class="cv-section mt-7">
+        <h3 class="cv-section-title">Education</h3>
+        {resume.education.map((item) => (
+          <div class="cv-entry mt-3">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
+                {item.degree}
+              </h4>
+              <p class="cv-date">{item.period}</p>
+            </div>
+            <p class="cv-org">{item.institution} · {item.location}</p>
+            <p class="cv-detail">{item.detail}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="cv-section mt-7">
+        <h3 class="cv-section-title">Research project</h3>
+        {resume.research.map((project) => (
+          <div class="cv-entry mt-3">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
+                {project.title}
+              </h4>
+              <p class="cv-date">{project.period}</p>
+            </div>
+            <p class="cv-org">{project.category}</p>
+            <p class="cv-detail">{project.summary}</p>
+            {project.category === "AI Research" && (
+              <ul class="cv-bullets">
                 {resume.thesisHighlights.map((highlight) => (
-                  <li class="flex gap-2 text-[12px] leading-relaxed text-[#4b5563]">
-                    <span class="mt-[7px] h-1 w-1 shrink-0 bg-[#0f766e]" aria-hidden="true" />
-                    <span>{highlight}</span>
-                  </li>
+                  <li>{highlight}</li>
                 ))}
               </ul>
-              <p class="mt-2.5 font-mono text-[9px] uppercase tracking-[0.1em] text-[#6b7280]">
-                {project.tags.join(" · ")}
-              </p>
+            )}
+            <p class="cv-tags">{project.tags.join(" · ")}</p>
+          </div>
+        ))}
+      </section>
+
+      <section class="cv-section mt-7">
+        <h3 class="cv-section-title">Engineering projects</h3>
+        {resume.engineering.map((project) => (
+          <div class="cv-entry mt-3">
+            <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+              <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
+                {project.title}
+              </h4>
+              <p class="cv-date">Earlier</p>
             </div>
-          ))}
-        </section>
+            <p class="cv-detail">{project.summary}</p>
+            <p class="cv-tags">{project.tags.join(" · ")}</p>
+          </div>
+        ))}
+      </section>
 
-        <section class="cv-section mt-7">
-          <h3
-            class="cv-section-title font-mono text-[9px] uppercase tracking-[0.22em] text-[#6b7280]"
-          >
-            Engineering
-          </h3>
-          {resume.engineering.map((project) => (
-            <div class="cv-entry mt-3">
-              <div class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-                <h4 class="font-display text-base font-semibold tracking-tight text-[#0b1220]">
-                  {project.title}
-                </h4>
-                <p class="font-mono text-[9px] uppercase tracking-[0.14em] text-[#6b7280]">
-                  Earlier
-                </p>
-              </div>
-              <p class="mt-2 text-[12px] leading-relaxed text-[#4b5563]">{project.summary}</p>
-              <p class="mt-2 font-mono text-[9px] uppercase tracking-[0.1em] text-[#6b7280]">
-                {project.tags.join(" · ")}
-              </p>
-            </div>
-          ))}
-        </section>
-
-        <section class="cv-section mt-7">
-          <h3
-            class="cv-section-title font-mono text-[9px] uppercase tracking-[0.22em] text-[#6b7280]"
-          >
-            Publications
-          </h3>
-          <p class="mt-3 text-[12px] leading-relaxed text-[#4b5563]">
-            {resume.publications.length === 0
-              ? "None yet — no peer-reviewed papers have been published. Nothing is listed rather than listed aspirationally."
-              : resume.publications.map((publication) => publication.title).join("; ")}
-          </p>
-        </section>
-      </div>
-
-      <aside class="cv-side border-t border-[#dfe4ea] bg-[#eef1f5] px-6 py-7 sm:px-7 md:border-l md:border-t-0">
-        <section>
-          <h3 class="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6b7280]">
-            Technical skills
-          </h3>
-          <dl class="mt-3 space-y-3.5">
-            {resume.skills.map((group) => (
-              <div>
-                <dt class="font-mono text-[9px] uppercase tracking-[0.12em] text-[#0f766e]">
-                  {group.title}
-                </dt>
-                <dd class="mt-1 text-[11px] leading-relaxed text-[#374151]">
-                  {group.items.join(", ")}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </section>
-
-        <section class="mt-7">
-          <h3 class="font-mono text-[9px] uppercase tracking-[0.22em] text-[#6b7280]">Links</h3>
-          <ul class="mt-3 space-y-1.5 text-[11px] text-[#374151]">
-            <li>
-              <a
-                href={site.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="transition-colors hover:text-[#0f766e]"
-              >
-                {resume.siteUrl}
-              </a>
-            </li>
-            {site.socials.map((social) => (
-              <li>
-                <a
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="transition-colors hover:text-[#0f766e]"
-                >
-                  {social.label}
-                </a>
-              </li>
-            ))}
-            <li>
-              <a
-                href={resume.thesisRepo}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="transition-colors hover:text-[#0f766e]"
-              >
-                Thesis repository
-              </a>
-            </li>
-          </ul>
-        </section>
-
-        <p
-          class="mt-8 border-t border-[#d7dde5] pt-4 font-mono text-[9px] uppercase tracking-[0.12em] text-[#6b7280]"
-        >
-          Updated {generated}
+      <section class="cv-section mt-7">
+        <h3 class="cv-section-title">Publications</h3>
+        <p class="mt-3 text-[12px] leading-relaxed text-[#4b5563]">
+          {resume.publications.length === 0
+            ? "None yet — no peer-reviewed papers have been published. Nothing is listed rather than listed aspirationally."
+            : resume.publications.map((publication) => publication.title).join("; ")}
         </p>
-      </aside>
+      </section>
+
+      <section class="cv-section mt-7">
+        <h3 class="cv-section-title">Links</h3>
+        <ul class="cv-links mt-3">
+          <li>
+            <a href={site.url} target="_blank" rel="noopener noreferrer">
+              {resume.siteUrl}
+            </a>
+          </li>
+          {site.socials.map((social) => (
+            <li>
+              <a href={social.href} target="_blank" rel="noopener noreferrer">
+                {social.label}
+              </a>
+            </li>
+          ))}
+          <li>
+            <a href={resume.thesisRepo} target="_blank" rel="noopener noreferrer">
+              Thesis repository
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <p class="cv-updated mt-8 border-t border-[#d7dde5] pt-4 font-mono text-[9px] uppercase tracking-[0.12em] text-[#6b7280]">
+        Updated {generated}
+      </p>
     </div>
   </article>
 </MainLayout>
 
-<style>
+<style is:global>
+  .cv-section-title {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: #6b7280;
+    padding-bottom: 6px;
+    border-bottom: 1px solid #dfe4ea;
+  }
+
+  .cv-date {
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #6b7280;
+    white-space: nowrap;
+  }
+
+  .cv-org {
+    margin-top: 2px;
+    font-size: 13px;
+    color: #374151;
+  }
+
+  .cv-detail {
+    margin-top: 6px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #4b5563;
+  }
+
+  .cv-bullets {
+    margin-top: 8px;
+    padding-left: 14px;
+    list-style: disc;
+    font-size: 12px;
+    line-height: 1.6;
+    color: #4b5563;
+  }
+
+  .cv-bullets li {
+    margin-top: 3px;
+  }
+
+  .cv-tags {
+    margin-top: 6px;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #6b7280;
+  }
+
+  .cv-skill-row {
+    display: grid;
+    grid-template-columns: 118px 1fr;
+    gap: 10px;
+    align-items: baseline;
+  }
+
+  .cv-links {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    font-size: 12px;
+    color: #374151;
+  }
+
+  .cv-links a {
+    color: #0f766e;
+    text-decoration: none;
+  }
+
   @media print {
+    header[data-site-chrome],
+    footer[data-site-chrome],
+    #scroll-progress,
+    #to-top,
+    #ambient,
+    #skip-link,
+    .print-hide {
+      display: none !important;
+    }
+
+    main {
+      max-width: none !important;
+      padding: 0 !important;
+    }
+
     #cv-sheet {
       width: 100% !important;
       max-width: none !important;
@@ -263,6 +297,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
       background: #fff !important;
       box-shadow: none !important;
       outline: none !important;
+      ring: none !important;
     }
 
     #cv-sheet,
@@ -273,32 +308,12 @@ const generated = new Date().toLocaleDateString("en-GB", {
       print-color-adjust: exact;
     }
 
-    .cv-accent {
-      display: none !important;
-    }
-
     .cv-header {
       padding: 0 0 8pt !important;
     }
 
-    .cv-layout {
-      display: block !important;
-    }
-
-    .cv-main {
+    .cv-body {
       padding: 0 !important;
-    }
-
-    .cv-side {
-      margin-top: 10pt !important;
-      padding: 10pt 0 0 !important;
-      border: 0 !important;
-      border-top: 1px solid #d7dde5 !important;
-      background: transparent !important;
-    }
-
-    .cv-side section {
-      margin-top: 8pt !important;
     }
 
     .cv-section {
@@ -322,6 +337,11 @@ const generated = new Date().toLocaleDateString("en-GB", {
       page-break-inside: avoid;
     }
 
+    .cv-bullets {
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
     #cv-sheet a {
       color: inherit !important;
       text-decoration: none !important;
@@ -329,7 +349,7 @@ const generated = new Date().toLocaleDateString("en-GB", {
 
     @page {
       size: A4;
-      margin: 11mm 12mm;
+      margin: 12mm 14mm;
     }
   }
 </style>
