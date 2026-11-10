@@ -2,6 +2,9 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { skillGroups } from "../data/profile";
+import { pageCopy } from "../data/pages";
+
+const profilePage = pageCopy.profilePage;
 ---
 
 <MainLayout
@@ -9,10 +12,10 @@ import { skillGroups } from "../data/profile";
   description="Technical profile of Samin Sadaf — languages, research methods and engineering environment."
 >
   <PageHero
-    eyebrow="Capabilities"
-    title="Technical"
-    accent="profile."
-    description="What I work with, listed plainly. No proficiency scores — a number would say less than the projects do."
+    eyebrow={profilePage.eyebrow}
+    title={profilePage.title}
+    accent={profilePage.accent}
+    description={profilePage.description}
   />
 
   <section class="py-14">
@@ -33,9 +36,7 @@ import { skillGroups } from "../data/profile";
     </div>
 
     <p class="mt-8 max-w-2xl text-sm leading-relaxed text-muted">
-      Deep learning frameworks are documented through the work itself — see the
-      thesis page for the stack behind each result — rather than as a list of
-      logos here.
+      {profilePage.note}
     </p>
   </section>
 </MainLayout>

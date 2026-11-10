@@ -2,6 +2,9 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { projects } from "../data/projects";
+import { pageCopy } from "../data/pages";
+
+const projectsPage = pageCopy.projectsPage;
 ---
 
 <MainLayout
@@ -9,9 +12,9 @@ import { projects } from "../data/projects";
   description="Software engineering projects by Samin Sadaf."
 >
   <PageHero
-    eyebrow="Work"
-    title="Projects"
-    description="The software I have actually built. Currently one project: a digital service booking system."
+    eyebrow={projectsPage.eyebrow}
+    title={projectsPage.title}
+    description={projectsPage.description}
   />
 
   <section class="py-10">

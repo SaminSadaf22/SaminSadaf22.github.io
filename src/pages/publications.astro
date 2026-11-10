@@ -2,6 +2,9 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { publications } from "../data/publications";
+import { pageCopy } from "../data/pages";
+
+const publicationsPage = pageCopy.publicationsPage;
 ---
 
 <MainLayout
@@ -9,18 +12,17 @@ import { publications } from "../data/publications";
   description="Research publications by Samin Sadaf."
 >
   <PageHero
-    eyebrow="Writing"
-    title="Publications"
-    description="Peer-reviewed papers, preprints and manuscripts. Nothing is listed here until it exists."
+    eyebrow={publicationsPage.eyebrow}
+    title={publicationsPage.title}
+    description={publicationsPage.description}
   />
 
   <section class="py-14">
     {publications.length === 0 ? (
       <div class="border border-dashed border-line px-6 py-16 text-center">
-        <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">No entries yet</p>
+        <p class="font-mono text-[10px] uppercase tracking-[0.2em] text-faint">{publicationsPage.emptyTitle}</p>
         <p class="mx-auto mt-4 max-w-md text-sm leading-relaxed text-muted">
-          Research publications and manuscripts will be listed here as they
-          become available.
+          {publicationsPage.emptyDescription}
         </p>
       </div>
     ) : (
@@ -32,6 +34,16 @@ import { publications } from "../data/publications";
             <p class="font-mono text-[11px] uppercase tracking-[0.14em] text-faint">
               {publication.venue} · {publication.year}
             </p>
+            {publication.href && (
+              <a
+                href={publication.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="mt-2 inline-flex font-mono text-[10px] uppercase tracking-[0.14em] text-muted hover:text-mint"
+              >
+                Read paper ↗
+              </a>
+            )}
           </li>
         ))}
       </ul>

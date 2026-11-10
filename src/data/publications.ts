@@ -1,3 +1,5 @@
+import content from "../../content/publications.json";
+
 export type Publication = {
   title: string;
   authors: string[];
@@ -6,6 +8,4 @@ export type Publication = {
   href?: string;
 };
 
-// Intentionally empty. Entries are added only when a paper exists and is
-// verifiable — never as placeholders to make the page look fuller.
-export const publications: Publication[] = [];
+export const publications: Publication[] = content as Publication[];

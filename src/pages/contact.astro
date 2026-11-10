@@ -2,6 +2,9 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import PageHero from "../components/PageHero.astro";
 import { site } from "../data/site";
+import { pageCopy } from "../data/pages";
+
+const contactPage = pageCopy.contactPage;
 ---
 
 <MainLayout
@@ -9,10 +12,10 @@ import { site } from "../data/site";
   description="Contact Samin Sadaf by email or phone."
 >
   <PageHero
-    eyebrow="Contact"
-    title="Say"
-    accent="hello."
-    description="Email is the most direct route. I reply to anything specific about the work."
+    eyebrow={contactPage.eyebrow}
+    title={contactPage.title}
+    accent={contactPage.accent}
+    description={contactPage.description}
   />
 
   <section class="grid gap-px border-b border-line bg-line md:grid-cols-2">

@@ -52,6 +52,39 @@ npm install
 npm run dev      # http://localhost:4321
 ```
 
+## Local content admin (FastAPI)
+
+The editable content lives in `content/*.json`. The Astro site imports those
+files directly, so a saved change appears on the local site after the dev server
+reloads.
+
+One-time backend setup:
+
+```bash
+python -m venv .venv
+.venv/Scripts/python -m pip install -r backend/requirements.txt   # Windows
+# .venv/bin/python -m pip install -r backend/requirements.txt     # macOS/Linux
+```
+
+Run the API and admin panel:
+
+```bash
+npm run backend   # http://127.0.0.1:8000/admin
+```
+
+In another terminal, run `npm run dev` for the site. The admin panel saves each
+segment to its JSON file. The **Push to GitHub** button stages `content/`,
+commits it, and pushes the current branch using your existing git credentials.
+
+If you want a local admin token, set `ADMIN_TOKEN` before starting the backend:
+
+```bash
+ADMIN_TOKEN=my-secret npm run backend
+```
+
+The token is then required for save and push requests and can be entered under
+**Settings** in the admin panel. The backend binds to `127.0.0.1` only.
+
 ## Publishing changes
 
 ```bash

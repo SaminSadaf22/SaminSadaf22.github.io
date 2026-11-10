@@ -1,40 +1,40 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
 import PageHero from "../components/PageHero.astro";
+import { resume } from "../data/resume";
+import { pageCopy } from "../data/pages";
+import { thesis } from "../data/thesis";
+
+const educationPage = pageCopy.educationPage;
+const degree = resume.education[0];
+const earlier = resume.education.slice(1);
 ---
 
 <MainLayout
   title="Education"
-  description="Education of Samin Sadaf — SSC and HSC in the Science group, then a BSc in Software Engineering at Daffodil International University."
+  description={educationPage.description}
 >
   <PageHero
-    eyebrow="Academic"
-    title="Education"
-    description="Secondary and higher secondary schooling in Bogura and Gaibandha, then a BSc in Software Engineering at Daffodil International University, graduated June 2026."
+    eyebrow={educationPage.eyebrow}
+    title={educationPage.title}
+    description={educationPage.description}
   />
 
   <section class="py-14">
     <div class="border border-line bg-card p-6 sm:p-8">
       <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">Earlier education</p>
       <ul class="mt-6 space-y-6">
-        <li>
-          <h2 class="font-display text-xl font-medium tracking-tight text-ink">
-            Higher Secondary Certificate (HSC), Science Group
-          </h2>
-          <p class="mt-1 text-base text-muted">
-            Ahammad Uddin Shah Shishu Niketan School and College · Gaibandha, Bangladesh
-          </p>
-          <p class="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">2019</p>
-        </li>
-        <li>
-          <h2 class="font-display text-xl font-medium tracking-tight text-ink">
-            Secondary School Certificate (SSC), Science Group
-          </h2>
-          <p class="mt-1 text-base text-muted">
-            Collectorate Public School and College · Bogura, Bangladesh
-          </p>
-          <p class="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">2017</p>
-        </li>
+        {earlier.map((item) => (
+          <li>
+            <h2 class="font-display text-xl font-medium tracking-tight text-ink">
+              {item.degree}
+            </h2>
+            <p class="mt-1 text-base text-muted">
+              {item.institution} · {item.location}
+            </p>
+            <p class="mt-2 font-mono text-[10px] uppercase tracking-[0.16em] text-faint">{item.period}</p>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
@@ -43,14 +43,14 @@ import PageHero from "../components/PageHero.astro";
     <div class="border border-line bg-card p-6 sm:p-8">
       <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">Bachelor's degree</p>
       <h2 class="mt-3 font-display text-2xl font-medium tracking-tight text-ink">
-        BSc in Software Engineering
+        {degree.degree}
       </h2>
-      <p class="mt-2 text-base text-muted">Daffodil International University · Dhaka, Bangladesh</p>
+      <p class="mt-2 text-base text-muted">{degree.institution} · {degree.location}</p>
 
       <dl class="mt-8 grid gap-px border border-line bg-line sm:grid-cols-2">
         {[
-          ["Graduated", "June 2026"],
-          ["Thesis", "Corn leaf disease detection"],
+          ["Graduated", degree.period],
+          ["Thesis", thesis.title],
         ].map(([term, detail]) => (
           <div class="bg-canvas p-5">
             <dt class="font-mono text-[10px] uppercase tracking-[0.18em] text-faint">{term}</dt>
@@ -60,9 +60,7 @@ import PageHero from "../components/PageHero.astro";
       </dl>
 
       <p class="mt-8 max-w-2xl text-sm leading-relaxed text-muted">
-        My thesis, <em>Corn Leaf Disease Detection Using Deep Learning</em>,
-        compared DenseNet121 and EfficientNet-B0 for image-based classification
-        of corn leaf disease. It is documented in full on the projects page.
+        {thesis.shortSummary}
       </p>
 
       <a
