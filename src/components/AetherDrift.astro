@@ -10,7 +10,6 @@ const { class: className } = Astro.props;
   <canvas data-canvas width="480" height="280"></canvas>
   <div class="aether-hud" aria-hidden="true">
     <div class="aether-title">
-      <span>AETHER DRIFT</span>
       <span data-mode>ATTRACT</span>
     </div>
     <div class="aether-stats">
@@ -18,6 +17,7 @@ const { class: className } = Astro.props;
       <span data-shield> shields 3</span>
     </div>
   </div>
+  <div class="aether-prompt" data-prompt>Click or press Space to take control</div>
   <div class="aether-footer" aria-hidden="true">
     <span data-status>Auto-pilot engaged · Click or Space to take control</span>
     <button type="button" data-restart>Reset</button>
@@ -90,6 +90,25 @@ const { class: className } = Astro.props;
     color: #5eead4;
     border-color: rgba(94, 234, 212, 0.4);
   }
+
+  .aether-prompt {
+    position: absolute;
+    left: 50%;
+    bottom: 2.5rem;
+    transform: translateX(-50%);
+    display: none;
+    padding: 0.3rem 0.75rem;
+    border: 1px solid rgba(94, 234, 212, 0.28);
+    border-radius: 999px;
+    background: rgba(5, 8, 18, 0.55);
+    color: #cbd5e1;
+    font-family: "JetBrains Mono", ui-monospace, monospace;
+    font-size: 9px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    pointer-events: none;
+    white-space: nowrap;
+  }
 </style>
 
 <script>
@@ -101,6 +120,7 @@ const { class: className } = Astro.props;
     const shieldEl = root.querySelector("[data-shield]");
     const statusEl = root.querySelector("[data-status]");
     const restartBtn = root.querySelector("[data-restart]");
+    const promptEl = root.querySelector("[data-prompt]");
 
     const W = canvas.width;
     const H = canvas.height;
@@ -298,9 +318,9 @@ const { class: className } = Astro.props;
         player.vy *= 0.86;
         player.y += player.vy;
       } else {
-        if (keys.up) player.vy -= 0.7;
-        if (keys.down) player.vy += 0.7;
-        player.vy *= 0.88;
+        if (keys.up) player.vy = Math.max(player.vy - 1.35, -5.5);
+        else if (keys.down) player.vy = Math.min(player.vy + 1.35, 5.5);
+        else player.vy *= 0.72;
         player.y += player.vy;
         if (player.boost > 0) player.boost -= 1;
         if (player.boostCooldown > 0) player.boostCooldown -= 1;
@@ -433,20 +453,9 @@ const { class: className } = Astro.props;
       ctx.fillText("SHIELD " + shield, W - 10, 16);
       ctx.textAlign = "left";
 
-      if (mode === "attract") {
-        ctx.fillStyle = "rgba(5, 8, 18, 0.42)";
-        ctx.fillRect(0, 0, W, H);
-        ctx.fillStyle = "#5eead4";
-        ctx.font = "bold 24px monospace";
-        ctx.textAlign = "center";
-        ctx.fillText("AETHER DRIFT", W / 2, H / 2 - 12);
-        ctx.fillStyle = "#94a3b8";
-        ctx.font = "12px monospace";
-        ctx.fillText("ATTRACT MODE", W / 2, H / 2 + 12);
-        ctx.font = "10px monospace";
-        ctx.fillText("Click or press Space to take control", W / 2, H / 2 + 34);
-        ctx.textAlign = "left";
-      } else if (mode === "over") {
+      if (promptEl) promptEl.style.display = mode === "attract" ? "block" : "none";
+
+      if (mode === "over") {
         ctx.fillStyle = "rgba(5, 8, 18, 0.62)";
         ctx.fillRect(0, 0, W, H);
         ctx.fillStyle = "#f87171";
@@ -528,11 +537,10 @@ const { class: className } = Astro.props;
     });
 
     canvas.addEventListener("pointermove", (event) => {
-      if (!pointerDown) return;
       event.preventDefault();
+      if (mode !== "playing") return;
       const rect = canvas.getBoundingClientRect();
       const y = (event.clientY - rect.top) * (H / rect.height);
-      if (Math.abs(event.clientY - startY) > 4) moved = true;
       player.y = Math.max(player.radius + 8, Math.min(H - player.radius - 8, y));
       player.vy = 0;
     });
