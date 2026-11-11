@@ -22,7 +22,6 @@ const marqueeItems = [
   "Deep learning",
 ];
 
-const project = projects[0];
 ---
 
 <MainLayout>
@@ -334,41 +333,58 @@ const project = projects[0];
       linkLabel="All projects"
     />
 
-    {project && (
-      <article class="card-surface relative mt-9 overflow-hidden rounded-2xl p-7 sm:p-9">
-        <div
-          class="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-mint/10 blur-3xl"
-          aria-hidden="true"
-        >
-        </div>
+    {projects.length > 0 && (
+      <div class="mt-9 grid gap-4 md:grid-cols-2">
+        {projects.map((project) => (
+          <article class="card-surface relative flex h-full flex-col overflow-hidden rounded-2xl p-7 sm:p-8">
+            <div
+              class="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-mint/10 blur-3xl"
+              aria-hidden="true"
+            >
+            </div>
 
-        <div class="relative">
-          <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">
-            {project.category} · {project.period}
-          </p>
-          <h3 class="mt-4 max-w-xl font-display text-2xl font-semibold leading-tight tracking-tight text-ink sm:text-3xl">
-            {project.title}
-          </h3>
-          <p class="mt-4 max-w-xl text-sm leading-relaxed text-muted">{project.summary}</p>
-        </div>
+            <div class="relative flex-1">
+              <p class="font-mono text-[10px] uppercase tracking-[0.18em] text-mint">
+                {project.category} · {project.period}
+              </p>
+              <h3 class="mt-4 font-display text-xl font-semibold leading-tight tracking-tight text-ink sm:text-2xl">
+                {project.title}
+              </h3>
+              <p class="mt-4 text-sm leading-relaxed text-muted">{project.summary}</p>
+            </div>
 
-        <div class="relative mt-8 flex flex-wrap items-end justify-between gap-4">
-          <div class="flex flex-wrap gap-2">
-            {project.tags.map((tag) => (
-              <span class="rounded-full border border-line bg-white/[0.02] px-3 py-1 font-mono text-[10px] tracking-[0.08em] text-faint">
-                {tag}
-              </span>
-            ))}
-          </div>
-          <a
-            href="/projects"
-            class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted transition-colors hover:text-mint"
-          >
-            View project
-            <ArrowRight size={13} strokeWidth={1.75} aria-hidden="true" />
-          </a>
-        </div>
-      </article>
+            <div class="relative mt-7 flex flex-wrap items-end justify-between gap-4">
+              <div class="flex flex-wrap gap-2">
+                {project.tags.map((tag) => (
+                  <span class="rounded-full border border-line bg-white/[0.02] px-3 py-1 font-mono text-[10px] tracking-[0.08em] text-faint">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+                <a
+                  href="/projects"
+                  class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted transition-colors hover:text-mint"
+                >
+                  View project
+                  <ArrowRight size={13} strokeWidth={1.75} aria-hidden="true" />
+                </a>
+                {project.repo && (
+                  <a
+                    href={project.repo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-faint transition-colors hover:text-mint"
+                  >
+                    GitHub
+                    <ArrowUpRight size={12} strokeWidth={1.75} aria-hidden="true" />
+                  </a>
+                )}
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
     )}
   </section>
 
