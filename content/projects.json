@@ -5,7 +5,11 @@
     "category": "Software Engineering",
     "period": "Software engineering project",
     "summary": "A Django application for managing service bookings, built before my focus moved to applied machine learning.",
-    "tags": ["Django", "Python", "Relational database"]
+    "tags": [
+      "Django",
+      "Python",
+      "Relational database"
+    ]
   },
   {
     "slug": "scholia",
@@ -13,9 +17,30 @@
     "category": "Software Engineering",
     "period": "2026",
     "summary": "A local FastAPI app that turns research papers into section-aware summaries, adds an inferred Research Gap segment, and selects faithful sentences with LexRank and MMR.",
-    "tags": ["Python", "FastAPI", "NLP"],
+    "tags": [
+      "Python",
+      "FastAPI",
+      "NLP"
+    ],
     "href": "https://scholia-delta.vercel.app/",
     "repo": "https://github.com/SaminSadaf22/scholia",
     "linkLabel": "Open app"
+  },
+  {
+    "slug": "minihub",
+    "title": "MiniHub — Lightweight GitHub-style Workspace",
+    "category": "Software Engineering",
+    "period": "2026",
+    "summary": "A minimal GitHub-like workspace for creating repositories, uploading files, and reviewing commit history. Built with Next.js, Express, Prisma, SQLite and isomorphic-git, with an interactive, portfolio-inspired UI.",
+    "tags": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Express",
+      "Prisma",
+      "SQLite"
+    ],
+    "repo": "https://github.com/SaminSadaf22/MINIHUB",
+    "linkLabel": "View repo"
   }
 ]
