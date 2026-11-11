@@ -7,29 +7,51 @@
   "app": {
     "title": "Corn Disease Detection & Advisory",
     "url": "https://huggingface.co/spaces/SAMINSADAF/Test01",
-    "description": "A deployed Gradio app that detects corn leaf disease from an uploaded image and returns treatment advice."
+    "description": "A deployed Gradio app that detects corn leaf disease from an uploaded image and returns validated, multi-LLM treatment advice."
   },
-  "shortSummary": "A controlled comparison of DenseNet121 and EfficientNet-B0 for corn leaf disease classification with transfer learning from ImageNet weights.",
-  "summary": "A controlled comparison of two convolutional backbones, DenseNet121 and EfficientNet-B0, for classifying corn leaf disease from images. The study was built around a question the accuracy headline usually hides: does an architecture comparison still hold once the split, the augmentation and the training budget are held fixed for both models?",
+  "shortSummary": "A comparative study of four CNN backbones (ResNet-50, DenseNet-121, EfficientNet-B0, MobileNetV2) for maize leaf disease classification, combined with a multi-LLM consensus advisory system across three providers.",
+  "summary": "An end-to-end system for maize (corn) leaf disease detection and treatment advisory. Four CNN backbones are adapted by transfer learning and evaluated in three modes: a single backbone, a soft-voting ensemble, and a hybrid cascade. A fault-tolerant loading routine reconciles the 1000-class ImageNet head with the 4-class output. The advisory subsystem validates predictions, filters low-confidence and mixed-infection cases, and obtains consensus across three LLM providers (Llama-3.2-90B via Groq, GLM-4.5-Air and DeepSeek-R1 via OpenRouter), with structured recovery and a deterministic expert rule-base fallback. Deployed as a bilingual (English and Bengali) Gradio app on Hugging Face Spaces.",
   "variables": [
     {
-      "title": "DenseNet121",
-      "body": "A densely connected backbone, where each layer receives the feature maps of every earlier layer. Included for its strong performance on small, fine-grained image datasets."
+      "title": "Four CNN backbones",
+      "body": "ResNet-50, DenseNet-121, EfficientNet-B0 and MobileNetV2, adapted by transfer learning from ImageNet. Evaluated independently and in three modes: single backbone, soft-voting ensemble, and hybrid cascade."
     },
     {
-      "title": "EfficientNet-B0",
-      "body": "A compound-scaled backbone that balances depth, width and resolution. Included as the more parameter-efficient alternative to test whether fewer parameters cost anything in accuracy."
+      "title": "Multi-LLM consensus advisory",
+      "body": "Treatment advice is validated across three independent providers (Llama-3.2-90B, GLM-4.5-Air, DeepSeek-R1), with structured recovery from malformed output, terminology screening, and a deterministic expert rule base as fallback."
     },
     {
-      "title": "Transfer learning from ImageNet",
-      "body": "Both models start from ImageNet weights rather than random initialisation, which is the realistic setting when labelled agricultural imagery is scarce."
+      "title": "Fault-tolerant model loading",
+      "body": "Safely reconciles the mismatch between the 1000-class ImageNet head and the 4-class output without runtime crashes during inference."
     }
   ],
-  "results": [],
-  "statusNote": "The dataset card, per-class metrics and the DenseNet121 / EfficientNet-B0 comparison table are published together with the thesis document, so the numbers here stay traceable to the report rather than being quoted from memory. The LaTeX source and figures live in the public repository.",
+  "results": [
+    {
+      "model": "ResNet-50",
+      "accuracy": "98.79%",
+      "macroF1": "0.988"
+    },
+    {
+      "model": "MobileNetV2",
+      "accuracy": "98.79%",
+      "macroF1": "0.988"
+    },
+    {
+      "model": "DenseNet-121",
+      "accuracy": "98.44%",
+      "macroF1": "0.984"
+    },
+    {
+      "model": "EfficientNet-B0",
+      "accuracy": "98.18%",
+      "macroF1": "0.982"
+    }
+  ],
+  "statusNote": "Per-class metrics, the backbone comparison and the LLM advisory evaluation are published with the thesis document, so the numbers here stay traceable to the report. The source and figures live in the public repository.",
   "limitations": [
     "Corn leaf disease is a narrow slice of agricultural vision: results here should not be read as evidence about field conditions, occlusion or other crops.",
-    "A two-model comparison is a starting point, not a survey — the honest conclusion is about these two backbones under one fixed protocol.",
-    "Reported accuracy is only meaningful alongside the split it was measured on, which is why the protocol is documented before the number."
+    "A four-backbone comparison is a starting point, not a survey - the honest conclusion is about these backbones under one fixed protocol.",
+    "Reported accuracy is only meaningful alongside the split it was measured on, which is why the protocol is documented before the number.",
+    "LLM advisory quality depends on provider availability and latency; the consensus and rule-base fallback exist precisely because no single provider is reliable alone."
   ]
 }
