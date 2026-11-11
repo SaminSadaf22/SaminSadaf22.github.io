@@ -2,6 +2,7 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import { ArrowUpRight } from "@lucide/astro";
 import { site } from "../data/site";
+import SocialIcon from "../components/SocialIcon.astro";
 import { resume } from "../data/resume";
 import { thesis } from "../data/thesis";
 
@@ -193,7 +194,8 @@ const contactLinks = [
           </li>
           {site.socials.map((social) => (
             <li>
-              <a href={social.href} target="_blank" rel="noopener noreferrer">
+              <a href={social.href} target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2">
+                <SocialIcon label={social.label} />
                 {social.label}
               </a>
             </li>

@@ -2,6 +2,7 @@
 import MainLayout from "../layouts/MainLayout.astro";
 import AetherDrift from "../components/AetherDrift.astro";
 import SectionHeading from "../components/SectionHeading.astro";
+import SocialIcon from "../components/SocialIcon.astro";
 import ResumeSection from "../components/ResumeSection.astro";
 import Terminal from "../components/Terminal.astro";
 import { firstName, lastName, site } from "../data/site";
@@ -170,6 +171,7 @@ const marqueeItems = [
                   rel="noopener noreferrer"
                   class="inline-flex items-center gap-1.5 text-[12px] text-muted transition-colors hover:text-mint"
                 >
+                  <SocialIcon label={social.label} />
                   {social.label}
                   <ArrowUpRight size={11} strokeWidth={1.75} aria-hidden="true" />
                 </a>

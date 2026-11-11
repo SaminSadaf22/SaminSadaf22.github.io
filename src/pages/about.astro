@@ -1,5 +1,6 @@
 ---
 import MainLayout from "../layouts/MainLayout.astro";
+import SocialIcon from "../components/SocialIcon.astro";
 import PageHero from "../components/PageHero.astro";
 import { site } from "../data/site";
 import { fillLocation, pageCopy } from "../data/pages";
@@ -43,8 +44,9 @@ const about = pageCopy.aboutPage;
                 href={social.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                class="text-sm text-muted underline decoration-line underline-offset-4 hover:text-mint"
+                class="inline-flex items-center gap-2 text-sm text-muted underline decoration-line underline-offset-4 hover:text-mint"
               >
+                <SocialIcon label={social.label} />
                 {social.label} ↗
               </a>
             </li>

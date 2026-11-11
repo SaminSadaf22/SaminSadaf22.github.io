@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { ArrowUp, ArrowUpRight } from "@lucide/astro";
 import Navbar from "../components/Navbar.astro";
+import SocialIcon from "../components/SocialIcon.astro";
 import { footerNav, initials, site } from "../data/site";
 import { resume } from "../data/resume";
 
@@ -161,6 +162,7 @@ const footerMore = footerNav.slice(5);
                   rel="noopener noreferrer"
                   class="inline-flex items-center gap-1.5 rounded-full border border-line px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.12em] text-muted transition-colors hover:border-mint/40 hover:text-mint"
                 >
+                  <SocialIcon label={social.label} />
                   {social.label}
                   <ArrowUpRight size={11} strokeWidth={1.75} aria-hidden="true" />
                 </a>
