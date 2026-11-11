@@ -48,7 +48,7 @@
     "projects": {
       "eyebrow": "Selected work",
       "title": "Projects, not screenshots",
-      "description": "The software I have actually built — currently one project."
+      "description": "The software I have actually built, from booking systems to local NLP tools."
     },
     "toolkit": {
       "eyebrow": "Toolkit",
@@ -99,7 +99,7 @@
   "projectsPage": {
     "eyebrow": "Work",
     "title": "Projects",
-    "description": "The software I have actually built. Currently one project: a digital service booking system."
+    "description": "The software I have actually built: a digital service booking system and a local research paper summarizer."
   },
   "educationPage": {
     "eyebrow": "Academic",
