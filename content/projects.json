@@ -42,5 +42,22 @@
     ],
     "repo": "https://github.com/SaminSadaf22/MINIHUB",
     "linkLabel": "View repo"
+  },
+  {
+    "slug": "rift-troopers-community",
+    "title": "Rift Troopers Community Hub",
+    "category": "Software Engineering",
+    "period": "2026",
+    "summary": "A community hub for the Rift Troopers mobile shooter: patch notes, guides, a weapon and map library, event sign-ups, and threaded discussion with voting and saves. A Next.js static frontend backed by a FastAPI service with SQLite persistence and JWT auth.",
+    "tags": [
+      "Next.js",
+      "TypeScript",
+      "FastAPI",
+      "Python",
+      "SQLite"
+    ],
+    "href": "https://rift-troopers-community.saminsadaf.me/",
+    "repo": "https://github.com/SaminSadaf22/rift-troopers-community",
+    "linkLabel": "Open site"
   }
 ]
